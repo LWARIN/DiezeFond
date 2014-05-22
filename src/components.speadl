@@ -1,0 +1,20 @@
+
+
+import fr.sma.speadl.GuiHandler
+import fr.sma.speadl.RobotHandler
+import fr.sma.speadl.impl.EnvironmentHandler
+
+namespace DiezeFond {
+	
+	component Gui {
+		provides guiHandler : GuiHandler 		
+	}
+	
+	component RobotFactory {
+		provides robotHandler : RobotHandler	
+	}
+	
+	component Environment {
+		provides environmentHandler : EnvironmentHandler
+	}
+}
