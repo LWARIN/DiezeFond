@@ -1,6 +1,6 @@
 package DiezeFond;
 
-import fr.sma.speadl.impl.EnvironmentHandler;
+import fr.sma.speadl.EnvironmentHandler;
 
 @SuppressWarnings("all")
 public abstract class Environment {

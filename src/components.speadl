@@ -2,7 +2,7 @@
 
 import fr.sma.speadl.GuiHandler
 import fr.sma.speadl.RobotHandler
-import fr.sma.speadl.impl.EnvironmentHandler
+import fr.sma.speadl.EnvironmentHandler
 
 namespace DiezeFond {
 	
