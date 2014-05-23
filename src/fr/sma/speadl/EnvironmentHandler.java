@@ -5,7 +5,7 @@ import fr.sma.core.State;
 public interface EnvironmentHandler {
 	
 	public final static int GRID_WIDTH = 100;
-	public final static int GRID_HEIGHT = 80;
+	public final static int GRID_HEIGHT = 50;
 
 	public void setExpeditionArea(int x, int y, int width, int height);
 	

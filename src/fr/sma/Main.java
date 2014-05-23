@@ -1,9 +1,7 @@
 package fr.sma;
 
-import fr.sma.speadl.impl.EnvironmentImpl;
 import fr.sma.speadl.impl.GuiImpl;
 import fr.sma.speadl.impl.RobotFactoryImpl;
-import DiezeFond.Environment;
 import DiezeFond.Gui;
 import DiezeFond.RobotFactory;
 
