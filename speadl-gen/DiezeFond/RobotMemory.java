@@ -1,6 +1,6 @@
 package DiezeFond;
 
-import fr.sma.speadl.MemoryHandler;
+import java.util.logging.MemoryHandler;
 
 @SuppressWarnings("all")
 public abstract class RobotMemory {

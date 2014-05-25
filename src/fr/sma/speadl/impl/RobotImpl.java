@@ -1,6 +1,6 @@
 package fr.sma.speadl.impl;
 
-import DiezeFond.Ecosystem.Robot;
+import DiezeFond.EcoEnvironment.Robot;
 import DiezeFond.RobotActionManager;
 import DiezeFond.RobotMemory;
 

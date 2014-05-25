@@ -1,5 +1,9 @@
 package fr.sma.speadl;
 
-public interface GridUpdater {
+import fr.sma.core.State;
 
+public interface GridUpdater {
+	
+	public State getState(int x, int y);
+	public void setState(int x, int y, State state);
 }

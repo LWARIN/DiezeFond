@@ -1,10 +1,10 @@
+import java.util.logging.MemoryHandler
 import fr.sma.speadl.ActionHandler
-import fr.sma.speadl.EnvironmentRenderer
-import fr.sma.speadl.EnvironmentUpdater
-import fr.sma.speadl.GridDataProvider
-import fr.sma.speadl.GridUpdater
-import fr.sma.speadl.MemoryHandler
 import fr.sma.speadl.MoveHandler
+import fr.sma.speadl.GridUpdater
+import fr.sma.speadl.EnvironmentRenderer
+import fr.sma.speadl.GridDataProvider
+import fr.sma.speadl.EnvironmentUpdater
 
 namespace DiezeFond {
 
@@ -46,7 +46,8 @@ namespace DiezeFond {
 		requires dataProvider: GridDataProvider
 	}
 
-	ecosystem Ecosystem {
+	ecosystem EcoEnvironment {
+		provides actionHandler : ActionHandler
 		species Robot {
 			requires environmentMoveHandler : MoveHandler
 			provides robotActionHandler : ActionHandler = actionManager.actionHandler
@@ -57,40 +58,23 @@ namespace DiezeFond {
 				bind moveHandler to environmentMoveHandler
 			}
 		}
-		
-		species Environment {
-			provides environmentMovedHandler : MoveHandler = move.moveHandler
-			requires robotActionHandler : ActionHandler
-			
-			provides updateEnvironment : EnvironmentUpdater = gridManager.updateEnvironment
-			provides dataProvider : GridDataProvider
-			requires guiRenderEnvironment : EnvironmentRenderer
-			
-			part clock: EnvironmentClock {
-				bind actionHandler to robotActionHandler
-				bind renderEnvironment to guiRenderEnvironment
-			}
 
-			part move: EnvironmentMove {
-				bind updateGrid to gridManager.updateGrid
-			}
-		
-			part gridManager : GridManager
-				
+		part clock: EnvironmentClock {
+			bind actionHandler to actionHandler
+			bind renderEnvironment to environmentGui.renderEnvironment
+		}
+
+		part move: EnvironmentMove {
+			bind updateGrid to gridManager.updateGrid
 		}
 		
-		species GUI {
-			provides renderEnvironment : EnvironmentRenderer = environmentGui.renderEnvironment
-			requires gridUpdateEnvironment : EnvironmentUpdater
-			requires gridDataProvider : GridDataProvider
-			
-			part environmentGui : EnvironmentGUI {
-				bind dataProvider to gridDataProvider
-			}
+		part gridManager : GridManager
 		
-			part appGui : AppGUI {
-				bind updateEnvironment to gridUpdateEnvironment
-			}
+		part environmentGui : EnvironmentGUI {
+			bind dataProvider to gridManager.dataProvider
+		}
+		part appGui : AppGUI {
+			bind updateEnvironment to gridManager.updateEnvironment
 		}
 	}	
 }

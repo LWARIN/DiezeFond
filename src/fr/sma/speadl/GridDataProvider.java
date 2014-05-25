@@ -1,10 +1,8 @@
 package fr.sma.speadl;
 
-import fr.sma.core.State;
+import fr.sma.core.Cell;
 
 public interface GridDataProvider {
 	
-	public State getState(int x, int y);
-	
-	public void setState(int x, int y, State state);
+	public Cell[][] getGridContent();
 }
