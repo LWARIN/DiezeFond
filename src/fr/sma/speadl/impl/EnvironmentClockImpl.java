@@ -16,8 +16,9 @@ public class EnvironmentClockImpl extends EnvironmentClock {
 			@Override
 			public void run() {
 				System.out.println("Clock tic : " + new Date(System.currentTimeMillis()));
+				requires().moveHandler().moveAgents();
 				requires().renderEnvironment().refresh();
 			}
-		}, 5000, 5000);
+		}, 3000, 3000);
 	}
 }

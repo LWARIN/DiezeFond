@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.sma.speadl.ActionHandler;
+import fr.sma.speadl.MoveHandler;
 import DiezeFond.AppGUI;
 import DiezeFond.EcoEnvironment;
 import DiezeFond.EnvironmentClock;
@@ -23,18 +24,28 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 	}
 
 	@Override
-	protected ActionHandler make_actionHandler() {
-		return new ActionHandlerImpl();
-	}
-
-	@Override
 	protected EnvironmentClock make_clock() {
 		return new EnvironmentClockImpl();
 	}
 
 	@Override
 	protected EnvironmentMove make_move() {
-		return new EnvironmentMoveImpl();
+		return new EnvironmentMove() {
+
+			@Override
+			protected MoveHandler make_moveHandler() {
+				return new MoveHandler() {
+
+					@Override
+					public void moveAgents() {
+						for (Robot.Component robot : robots) {
+							robot.robotActionHandler().triggerAction();
+						}
+					}
+				};
+			}
+
+		};
 	}
 
 	@Override
@@ -55,5 +66,16 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 	@Override
 	protected Robot make_Robot(String id) {
 		return new RobotImpl(id);
+	}
+
+	@Override
+	protected ActionHandler make_actionHandler() {
+		return new ActionHandler() {
+
+			@Override
+			public void triggerAction() {
+				
+			}
+		};
 	}
 }

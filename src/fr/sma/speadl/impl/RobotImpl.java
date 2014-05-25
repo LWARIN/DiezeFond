@@ -1,5 +1,8 @@
 package fr.sma.speadl.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import fr.sma.core.Cell;
 import fr.sma.speadl.ActionHandler;
 import fr.sma.speadl.MemoryHandler;
@@ -9,8 +12,10 @@ import DiezeFond.RobotMemory;
 
 public class RobotImpl extends Robot {
 
+	private final static Logger LOGGER = Logger.getLogger(RobotImpl.class.getName());
+	private String id;
 	public RobotImpl(String id) {
-		System.out.println("ID ROBOT : " + id);
+		this.id = id;
 	}
 
 	@Override
@@ -38,6 +43,11 @@ public class RobotImpl extends Robot {
 			@Override
 			protected ActionHandler make_actionHandler() {
 				return new ActionHandler() {
+
+					@Override
+					public void triggerAction() {
+						LOGGER.log(Level.INFO, "Robot #" + id + " triggering scheduled action !");
+					}
 
 				};
 			}
