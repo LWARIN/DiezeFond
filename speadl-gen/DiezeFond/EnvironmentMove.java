@@ -1,5 +1,6 @@
 package DiezeFond;
 
+import fr.sma.speadl.ActionHandler;
 import fr.sma.speadl.GridUpdater;
 import fr.sma.speadl.MoveHandler;
 
@@ -7,6 +8,12 @@ import fr.sma.speadl.MoveHandler;
 public abstract class EnvironmentMove {
   @SuppressWarnings("all")
   public interface Requires {
+    /**
+     * This can be called by the implementation to access this required port.
+     * 
+     */
+    public ActionHandler actionHandler();
+    
     /**
      * This can be called by the implementation to access this required port.
      * 

@@ -17,7 +17,9 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 
 	public EcoEnvironmentImpl() {
 		robots = new ArrayList<Robot.Component>();
-
+		for (int i = 0; i < 10; i++) {
+			robots.add(newRobot("#id" + i));
+		}
 	}
 
 	@Override
@@ -52,6 +54,8 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 
 	@Override
 	protected Robot make_Robot(String id) {
-		return new RobotImpl(id);
+		return new RobotImpl(id) {
+			
+		};
 	}
 }

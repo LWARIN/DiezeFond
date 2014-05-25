@@ -1,11 +1,11 @@
-import java.util.logging.MemoryHandler
 import fr.sma.speadl.ActionHandler
-import fr.sma.speadl.MoveHandler
-import fr.sma.speadl.GridUpdater
 import fr.sma.speadl.EnvironmentRenderer
-import fr.sma.speadl.GridDataProvider
 import fr.sma.speadl.EnvironmentUpdater
+import fr.sma.speadl.GridDataProvider
+import fr.sma.speadl.GridUpdater
 import fr.sma.speadl.GuiConnector
+import fr.sma.speadl.MoveHandler
+import java.util.logging.MemoryHandler
 
 namespace DiezeFond {
 
@@ -17,18 +17,18 @@ namespace DiezeFond {
 	component RobotActionManager {
 		provides actionHandler: ActionHandler
 		requires memoryHandler: MemoryHandler
-		requires moveHandler: MoveHandler
 	}
 	
 	/* Environment components */
 	component EnvironmentMove {
-		provides moveHandler: MoveHandler
+		requires actionHandler: ActionHandler
 		requires updateGrid: GridUpdater
+		provides moveHandler: MoveHandler
 	}
 	
 	component EnvironmentClock {
 		requires renderEnvironment: EnvironmentRenderer
-		requires actionHandler: ActionHandler
+		requires moveHandler: MoveHandler
 	}
 	
 	component GridManager {
@@ -53,15 +53,12 @@ namespace DiezeFond {
 		provides actionHandler : ActionHandler
 		provides gridHandler : EnvironmentUpdater = gridManager.updateEnvironment
 		provides environmentGuiHandler : EnvironmentRenderer = environmentGui.renderEnvironment
-		species Robot(id: String) {
-			requires environmentMoveHandler : MoveHandler
-			provides robotActionHandler : ActionHandler = actionManager.actionHandler
-			
+		species Robot (id : String) {
 			part memory: RobotMemory
 			part actionManager: RobotActionManager {
 				bind memoryHandler to memory.memoryHandler
-				bind moveHandler to environmentMoveHandler
 			}
+			provides robotActionHandler : ActionHandler = actionManager.actionHandler
 		}
 
 		part appGui : AppGUI {
@@ -69,16 +66,16 @@ namespace DiezeFond {
 		}
 
 		part clock: EnvironmentClock {
-			bind actionHandler to actionHandler
+			bind moveHandler to move.moveHandler
 			bind renderEnvironment to environmentGui.renderEnvironment
 		}
 
 		part move: EnvironmentMove {
 			bind updateGrid to gridManager.updateGrid
+			bind actionHandler to actionHandler
 		}
 		
 		part gridManager : GridManager
-		
 		part environmentGui : EnvironmentGUI {
 			bind dataProvider to gridManager.dataProvider
 			bind guiLink to appGui.guiLink

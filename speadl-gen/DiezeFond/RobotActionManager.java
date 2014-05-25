@@ -1,7 +1,6 @@
 package DiezeFond;
 
 import fr.sma.speadl.ActionHandler;
-import fr.sma.speadl.MoveHandler;
 import java.util.logging.MemoryHandler;
 
 @SuppressWarnings("all")
@@ -13,12 +12,6 @@ public abstract class RobotActionManager {
      * 
      */
     public MemoryHandler memoryHandler();
-    
-    /**
-     * This can be called by the implementation to access this required port.
-     * 
-     */
-    public MoveHandler moveHandler();
   }
   
   

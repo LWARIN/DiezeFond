@@ -212,8 +212,8 @@ public abstract class EcoEnvironment {
     
     @SuppressWarnings("all")
     private final class BridgeImpl_clock implements EnvironmentClock.Requires {
-      public final ActionHandler actionHandler() {
-        return EcoEnvironment.ComponentImpl.this.actionHandler();
+      public final MoveHandler moveHandler() {
+        return EcoEnvironment.ComponentImpl.this.move.moveHandler();
       }
       
       public final EnvironmentRenderer renderEnvironment() {
@@ -234,6 +234,10 @@ public abstract class EcoEnvironment {
     private final class BridgeImpl_move implements EnvironmentMove.Requires {
       public final GridUpdater updateGrid() {
         return EcoEnvironment.ComponentImpl.this.gridManager.updateGrid();
+      }
+      
+      public final ActionHandler actionHandler() {
+        return EcoEnvironment.ComponentImpl.this.actionHandler();
       }
     }
     
@@ -281,11 +285,6 @@ public abstract class EcoEnvironment {
   public abstract static class Robot {
     @SuppressWarnings("all")
     public interface Requires {
-      /**
-       * This can be called by the implementation to access this required port.
-       * 
-       */
-      public MoveHandler environmentMoveHandler();
     }
     
     
@@ -402,10 +401,6 @@ public abstract class EcoEnvironment {
       private final class BridgeImpl_actionManager implements RobotActionManager.Requires {
         public final MemoryHandler memoryHandler() {
           return EcoEnvironment.Robot.ComponentImpl.this.memory.memoryHandler();
-        }
-        
-        public final MoveHandler moveHandler() {
-          return EcoEnvironment.Robot.ComponentImpl.this.bridge.environmentMoveHandler();
         }
       }
       
@@ -691,6 +686,15 @@ public abstract class EcoEnvironment {
     assert this.selfComponent != null: "This is a bug.";
     implem.ecosystemComponent = this.selfComponent;
     return implem;
+  }
+  
+  /**
+   * This can be called to create an instance of the species from inside the implementation of the ecosystem.
+   * 
+   */
+  protected EcoEnvironment.Robot.Component newRobot(final String id) {
+    EcoEnvironment.Robot implem = _createImplementationOfRobot(id);
+    return implem._newComponent(new EcoEnvironment.Robot.Requires() {},true);
   }
   
   /**

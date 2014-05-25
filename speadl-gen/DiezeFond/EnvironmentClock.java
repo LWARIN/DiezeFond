@@ -1,7 +1,7 @@
 package DiezeFond;
 
-import fr.sma.speadl.ActionHandler;
 import fr.sma.speadl.EnvironmentRenderer;
+import fr.sma.speadl.MoveHandler;
 
 @SuppressWarnings("all")
 public abstract class EnvironmentClock {
@@ -17,7 +17,7 @@ public abstract class EnvironmentClock {
      * This can be called by the implementation to access this required port.
      * 
      */
-    public ActionHandler actionHandler();
+    public MoveHandler moveHandler();
   }
   
   
