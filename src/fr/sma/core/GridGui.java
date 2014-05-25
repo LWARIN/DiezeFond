@@ -6,17 +6,12 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import fr.sma.speadl.EnvironmentUpdater;
-import fr.sma.speadl.GridDataProvider;
 
 public class GridGui extends JPanel {
 
 	private static final long serialVersionUID = -3656866293410119738L;
 	
-	private GridDataProvider provider;
-	
-	public GridGui(GridDataProvider provider) {
-		this.provider = provider;
-	}
+	private Cell[][] content;
 
 	private void drawCell(Graphics g, int x, int y, Color color) {
 		g.setColor(color);
@@ -33,7 +28,7 @@ public class GridGui extends JPanel {
 		for (int i = 0; i < EnvironmentUpdater.GRID_WIDTH; i++) {
 			for (int j = 0; j < EnvironmentUpdater.GRID_HEIGHT; j++) {
 				Color color;
-				switch (provider.getState(i, j)) {
+				switch (content[i][j].getState()) {
 				case EXPEDITION:
 				case DESTINATION:
 					color = Color.DARK_GRAY;
@@ -67,5 +62,13 @@ public class GridGui extends JPanel {
 		for (int i = 10; i <= 500; i += 10) {
 			g.drawLine(10, i, 810, i);
 		}
+	}
+
+	public Cell[][] getContent() {
+		return content;
+	}
+
+	public void setContent(Cell[][] content) {
+		this.content = content;
 	}
 }
