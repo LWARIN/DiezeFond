@@ -13,8 +13,8 @@ import fr.sma.speadl.EnvironmentUpdater;
 import fr.sma.speadl.GridDataProvider;
 import fr.sma.speadl.GridUpdater;
 import fr.sma.speadl.GuiConnector;
+import fr.sma.speadl.MemoryHandler;
 import fr.sma.speadl.MoveHandler;
-import java.util.logging.MemoryHandler;
 
 @SuppressWarnings("all")
 public abstract class EcoEnvironment {

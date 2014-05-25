@@ -1,7 +1,7 @@
 package DiezeFond;
 
 import fr.sma.speadl.ActionHandler;
-import java.util.logging.MemoryHandler;
+import fr.sma.speadl.MemoryHandler;
 
 @SuppressWarnings("all")
 public abstract class RobotActionManager {

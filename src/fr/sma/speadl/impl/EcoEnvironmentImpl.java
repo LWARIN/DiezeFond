@@ -54,8 +54,6 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 
 	@Override
 	protected Robot make_Robot(String id) {
-		return new RobotImpl(id) {
-			
-		};
+		return new RobotImpl(id);
 	}
 }
