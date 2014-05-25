@@ -30,6 +30,12 @@ public abstract class EcoEnvironment {
      * 
      */
     public ActionHandler actionHandler();
+    
+    /**
+     * This can be called to access the provided port.
+     * 
+     */
+    public EnvironmentUpdater gridHandler();
   }
   
   
@@ -168,6 +174,10 @@ public abstract class EcoEnvironment {
     
     public final ActionHandler actionHandler() {
       return this.actionHandler;
+    }
+    
+    public final EnvironmentUpdater gridHandler() {
+      return this.gridManager.updateEnvironment();
     }
     
     private EnvironmentClock.Component clock;

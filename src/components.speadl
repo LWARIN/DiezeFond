@@ -51,6 +51,7 @@ namespace DiezeFond {
 
 	ecosystem EcoEnvironment {
 		provides actionHandler : ActionHandler
+		provides gridHandler : EnvironmentUpdater = gridManager.updateEnvironment
 		species Robot {
 			requires environmentMoveHandler : MoveHandler
 			provides robotActionHandler : ActionHandler = actionManager.actionHandler
