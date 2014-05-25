@@ -24,6 +24,8 @@ public class GridGui extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		System.out.println("############## PAINT ME ######################");
 
 		for (int i = 0; i < EnvironmentUpdater.GRID_WIDTH; i++) {
 			for (int j = 0; j < EnvironmentUpdater.GRID_HEIGHT; j++) {
@@ -70,5 +72,7 @@ public class GridGui extends JPanel {
 
 	public void setContent(Cell[][] content) {
 		this.content = content;
+		repaint();
+		System.out.println("grid gui set content " + content.length);
 	}
 }

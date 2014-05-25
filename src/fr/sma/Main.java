@@ -13,5 +13,7 @@ public class Main {
 		ecosystem.gridHandler().setReceptionArea(70, 10, 10, 30);
 		ecosystem.gridHandler().addCorridor(0);
 		ecosystem.gridHandler().addCorridor(49);
+		
+		ecosystem.environmentGuiHandler().refresh();
 	}
 }

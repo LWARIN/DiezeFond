@@ -52,7 +52,8 @@ namespace DiezeFond {
 	ecosystem EcoEnvironment {
 		provides actionHandler : ActionHandler
 		provides gridHandler : EnvironmentUpdater = gridManager.updateEnvironment
-		species Robot {
+		provides environmentGuiHandler : EnvironmentRenderer = environmentGui.renderEnvironment
+		species Robot(id: String) {
 			requires environmentMoveHandler : MoveHandler
 			provides robotActionHandler : ActionHandler = actionManager.actionHandler
 			
@@ -61,6 +62,10 @@ namespace DiezeFond {
 				bind memoryHandler to memory.memoryHandler
 				bind moveHandler to environmentMoveHandler
 			}
+		}
+
+		part appGui : AppGUI {
+			bind updateEnvironment to gridManager.updateEnvironment
 		}
 
 		part clock: EnvironmentClock {
@@ -77,10 +82,6 @@ namespace DiezeFond {
 		part environmentGui : EnvironmentGUI {
 			bind dataProvider to gridManager.dataProvider
 			bind guiLink to appGui.guiLink
-		}
-		
-		part appGui : AppGUI {
-			bind updateEnvironment to gridManager.updateEnvironment
 		}
 	}	
 }

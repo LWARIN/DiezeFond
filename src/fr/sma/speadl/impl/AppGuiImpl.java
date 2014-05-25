@@ -11,7 +11,6 @@ public class AppGuiImpl extends AppGUI {
 	private JFrame window;
 
 	public AppGuiImpl() {
-
 		window = new JFrame();
 		window.setSize(840, 560);
 		window.setResizable(false);
@@ -25,8 +24,10 @@ public class AppGuiImpl extends AppGUI {
 
 			@Override
 			public void setEnvironmentGui(JPanel content) {
+				System.out.println("APP GUI SET ENVIRONMENT GUI");
+				window.removeAll();
+				System.out.println(content.getSize());
 				window.add(content);
-				window.pack();
 			}
 		};
 	}

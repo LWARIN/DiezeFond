@@ -16,14 +16,15 @@ public class EnvironmentGuiImpl extends EnvironmentGUI {
 	@Override
 	protected EnvironmentRenderer make_renderEnvironment() {
 		
-		
 		return new EnvironmentRenderer() {
 
 			@Override
 			public void refresh() {
 				Cell[][] gridContent = requires().dataProvider().getGridContent();
+				System.out.println("ENVIRONMENT GUI IMPL REFRESH : " + gridContent.length);
 				gridGui.setContent(gridContent);
 				gridGui.repaint();
+				requires().guiLink().setEnvironmentGui(gridGui);
 			}
 		};
 	}

@@ -7,8 +7,9 @@ public class EnvironmentMoveImpl extends EnvironmentMove {
 
 	@Override
 	protected MoveHandler make_moveHandler() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MoveHandler() {
+			
+		};
 	}
 
 }

@@ -1,5 +1,8 @@
 package fr.sma.speadl.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.sma.speadl.ActionHandler;
 import DiezeFond.AppGUI;
 import DiezeFond.EcoEnvironment;
@@ -8,9 +11,15 @@ import DiezeFond.EnvironmentGUI;
 import DiezeFond.EnvironmentMove;
 import DiezeFond.GridManager;
 
-
 public class EcoEnvironmentImpl extends EcoEnvironment {
-	
+
+	private List<Robot.Component> robots;
+
+	public EcoEnvironmentImpl() {
+		robots = new ArrayList<Robot.Component>();
+
+	}
+
 	@Override
 	protected ActionHandler make_actionHandler() {
 		return new ActionHandlerImpl();
@@ -42,7 +51,7 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 	}
 
 	@Override
-	protected Robot make_Robot() {
-		return new RobotImpl();
+	protected Robot make_Robot(String id) {
+		return new RobotImpl(id);
 	}
 }

@@ -36,6 +36,12 @@ public abstract class EcoEnvironment {
      * 
      */
     public EnvironmentUpdater gridHandler();
+    
+    /**
+     * This can be called to access the provided port.
+     * 
+     */
+    public EnvironmentRenderer environmentGuiHandler();
   }
   
   
@@ -46,6 +52,13 @@ public abstract class EcoEnvironment {
   
   @SuppressWarnings("all")
   public interface Parts {
+    /**
+     * This can be called by the implementation to access the part and its provided ports.
+     * It will be initialized after the required ports are initialized and before the provided ports are initialized.
+     * 
+     */
+    public AppGUI.Component appGui();
+    
     /**
      * This can be called by the implementation to access the part and its provided ports.
      * It will be initialized after the required ports are initialized and before the provided ports are initialized.
@@ -73,13 +86,6 @@ public abstract class EcoEnvironment {
      * 
      */
     public EnvironmentGUI.Component environmentGui();
-    
-    /**
-     * This can be called by the implementation to access the part and its provided ports.
-     * It will be initialized after the required ports are initialized and before the provided ports are initialized.
-     * 
-     */
-    public AppGUI.Component appGui();
   }
   
   
@@ -90,6 +96,8 @@ public abstract class EcoEnvironment {
     private final EcoEnvironment implementation;
     
     public void start() {
+      assert this.appGui != null: "This is a bug.";
+      ((AppGUI.ComponentImpl) this.appGui).start();
       assert this.clock != null: "This is a bug.";
       ((EnvironmentClock.ComponentImpl) this.clock).start();
       assert this.move != null: "This is a bug.";
@@ -98,14 +106,19 @@ public abstract class EcoEnvironment {
       ((GridManager.ComponentImpl) this.gridManager).start();
       assert this.environmentGui != null: "This is a bug.";
       ((EnvironmentGUI.ComponentImpl) this.environmentGui).start();
-      assert this.appGui != null: "This is a bug.";
-      ((AppGUI.ComponentImpl) this.appGui).start();
       this.implementation.start();
       this.implementation.started = true;
       
     }
     
     protected void initParts() {
+      assert this.appGui == null: "This is a bug.";
+      assert this.implem_appGui == null: "This is a bug.";
+      this.implem_appGui = this.implementation.make_appGui();
+      if (this.implem_appGui == null) {
+      	throw new RuntimeException("make_appGui() in DiezeFond.EcoEnvironment should not return null.");
+      }
+      this.appGui = this.implem_appGui._newComponent(new BridgeImpl_appGui(), false);
       assert this.clock == null: "This is a bug.";
       assert this.implem_clock == null: "This is a bug.";
       this.implem_clock = this.implementation.make_clock();
@@ -134,13 +147,6 @@ public abstract class EcoEnvironment {
       	throw new RuntimeException("make_environmentGui() in DiezeFond.EcoEnvironment should not return null.");
       }
       this.environmentGui = this.implem_environmentGui._newComponent(new BridgeImpl_environmentGui(), false);
-      assert this.appGui == null: "This is a bug.";
-      assert this.implem_appGui == null: "This is a bug.";
-      this.implem_appGui = this.implementation.make_appGui();
-      if (this.implem_appGui == null) {
-      	throw new RuntimeException("make_appGui() in DiezeFond.EcoEnvironment should not return null.");
-      }
-      this.appGui = this.implem_appGui._newComponent(new BridgeImpl_appGui(), false);
       
     }
     
@@ -178,6 +184,26 @@ public abstract class EcoEnvironment {
     
     public final EnvironmentUpdater gridHandler() {
       return this.gridManager.updateEnvironment();
+    }
+    
+    public final EnvironmentRenderer environmentGuiHandler() {
+      return this.environmentGui.renderEnvironment();
+    }
+    
+    private AppGUI.Component appGui;
+    
+    private AppGUI implem_appGui;
+    
+    @SuppressWarnings("all")
+    private final class BridgeImpl_appGui implements AppGUI.Requires {
+      public final EnvironmentUpdater updateEnvironment() {
+        return EcoEnvironment.ComponentImpl.this.gridManager.updateEnvironment();
+      }
+    }
+    
+    
+    public final AppGUI.Component appGui() {
+      return this.appGui;
     }
     
     private EnvironmentClock.Component clock;
@@ -247,22 +273,6 @@ public abstract class EcoEnvironment {
     
     public final EnvironmentGUI.Component environmentGui() {
       return this.environmentGui;
-    }
-    
-    private AppGUI.Component appGui;
-    
-    private AppGUI implem_appGui;
-    
-    @SuppressWarnings("all")
-    private final class BridgeImpl_appGui implements AppGUI.Requires {
-      public final EnvironmentUpdater updateEnvironment() {
-        return EcoEnvironment.ComponentImpl.this.gridManager.updateEnvironment();
-      }
-    }
-    
-    
-    public final AppGUI.Component appGui() {
-      return this.appGui;
     }
   }
   
@@ -615,6 +625,13 @@ public abstract class EcoEnvironment {
    * This will be called once during the construction of the component to initialize this sub-component.
    * 
    */
+  protected abstract AppGUI make_appGui();
+  
+  /**
+   * This should be overridden by the implementation to define how to create this sub-component.
+   * This will be called once during the construction of the component to initialize this sub-component.
+   * 
+   */
   protected abstract EnvironmentClock make_clock();
   
   /**
@@ -639,13 +656,6 @@ public abstract class EcoEnvironment {
   protected abstract EnvironmentGUI make_environmentGui();
   
   /**
-   * This should be overridden by the implementation to define how to create this sub-component.
-   * This will be called once during the construction of the component to initialize this sub-component.
-   * 
-   */
-  protected abstract AppGUI make_appGui();
-  
-  /**
    * Not meant to be used to manually instantiate components (except for testing).
    * 
    */
@@ -666,14 +676,14 @@ public abstract class EcoEnvironment {
    * This should be overridden by the implementation to instantiate the implementation of the species.
    * 
    */
-  protected abstract EcoEnvironment.Robot make_Robot();
+  protected abstract EcoEnvironment.Robot make_Robot(final String id);
   
   /**
    * Do not call, used by generated code.
    * 
    */
-  public EcoEnvironment.Robot _createImplementationOfRobot() {
-    EcoEnvironment.Robot implem = make_Robot();
+  public EcoEnvironment.Robot _createImplementationOfRobot(final String id) {
+    EcoEnvironment.Robot implem = make_Robot(id);
     if (implem == null) {
     	throw new RuntimeException("make_Robot() in DiezeFond.EcoEnvironment should not return null.");
     }
