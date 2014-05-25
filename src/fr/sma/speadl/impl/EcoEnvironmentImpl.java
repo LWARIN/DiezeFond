@@ -1,8 +1,6 @@
 package fr.sma.speadl.impl;
 
-import fr.sma.core.Cell;
 import fr.sma.speadl.ActionHandler;
-import fr.sma.speadl.EnvironmentUpdater;
 import DiezeFond.AppGUI;
 import DiezeFond.EcoEnvironment;
 import DiezeFond.EnvironmentClock;

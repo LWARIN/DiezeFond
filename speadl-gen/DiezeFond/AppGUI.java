@@ -1,6 +1,7 @@
 package DiezeFond;
 
 import fr.sma.speadl.EnvironmentUpdater;
+import fr.sma.speadl.GuiConnector;
 
 @SuppressWarnings("all")
 public abstract class AppGUI {
@@ -16,6 +17,11 @@ public abstract class AppGUI {
   
   @SuppressWarnings("all")
   public interface Provides {
+    /**
+     * This can be called to access the provided port.
+     * 
+     */
+    public GuiConnector guiLink();
   }
   
   
@@ -46,6 +52,11 @@ public abstract class AppGUI {
     }
     
     protected void initProvidedPorts() {
+      assert this.guiLink == null: "This is a bug.";
+      this.guiLink = this.implementation.make_guiLink();
+      if (this.guiLink == null) {
+      	throw new RuntimeException("make_guiLink() in DiezeFond.AppGUI should not return null.");
+      }
       
     }
     
@@ -64,6 +75,12 @@ public abstract class AppGUI {
       	initProvidedPorts();
       }
       
+    }
+    
+    private GuiConnector guiLink;
+    
+    public final GuiConnector guiLink() {
+      return this.guiLink;
     }
   }
   
@@ -107,6 +124,13 @@ public abstract class AppGUI {
     return this.selfComponent;
     
   }
+  
+  /**
+   * This should be overridden by the implementation to define the provided port.
+   * This will be called once during the construction of the component to initialize the port.
+   * 
+   */
+  protected abstract GuiConnector make_guiLink();
   
   /**
    * This can be called by the implementation to access the required ports.

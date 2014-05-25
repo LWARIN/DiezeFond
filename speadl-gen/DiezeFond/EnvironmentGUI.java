@@ -2,11 +2,18 @@ package DiezeFond;
 
 import fr.sma.speadl.EnvironmentRenderer;
 import fr.sma.speadl.GridDataProvider;
+import fr.sma.speadl.GuiConnector;
 
 @SuppressWarnings("all")
 public abstract class EnvironmentGUI {
   @SuppressWarnings("all")
   public interface Requires {
+    /**
+     * This can be called by the implementation to access this required port.
+     * 
+     */
+    public GuiConnector guiLink();
+    
     /**
      * This can be called by the implementation to access this required port.
      * 

@@ -5,6 +5,7 @@ import fr.sma.speadl.GridUpdater
 import fr.sma.speadl.EnvironmentRenderer
 import fr.sma.speadl.GridDataProvider
 import fr.sma.speadl.EnvironmentUpdater
+import fr.sma.speadl.GuiConnector
 
 namespace DiezeFond {
 
@@ -38,10 +39,12 @@ namespace DiezeFond {
 	
 	/* GUI components */
 	component AppGUI {
+		provides guiLink : GuiConnector
 		requires updateEnvironment: EnvironmentUpdater
 	}
 	
 	component EnvironmentGUI {
+		requires guiLink : GuiConnector
 		provides renderEnvironment: EnvironmentRenderer
 		requires dataProvider: GridDataProvider
 	}
@@ -72,7 +75,9 @@ namespace DiezeFond {
 		
 		part environmentGui : EnvironmentGUI {
 			bind dataProvider to gridManager.dataProvider
+			bind guiLink to appGui.guiLink
 		}
+		
 		part appGui : AppGUI {
 			bind updateEnvironment to gridManager.updateEnvironment
 		}

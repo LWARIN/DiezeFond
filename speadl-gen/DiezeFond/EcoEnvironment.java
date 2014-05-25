@@ -12,6 +12,7 @@ import fr.sma.speadl.EnvironmentRenderer;
 import fr.sma.speadl.EnvironmentUpdater;
 import fr.sma.speadl.GridDataProvider;
 import fr.sma.speadl.GridUpdater;
+import fr.sma.speadl.GuiConnector;
 import fr.sma.speadl.MoveHandler;
 import java.util.logging.MemoryHandler;
 
@@ -226,6 +227,10 @@ public abstract class EcoEnvironment {
     private final class BridgeImpl_environmentGui implements EnvironmentGUI.Requires {
       public final GridDataProvider dataProvider() {
         return EcoEnvironment.ComponentImpl.this.gridManager.dataProvider();
+      }
+      
+      public final GuiConnector guiLink() {
+        return EcoEnvironment.ComponentImpl.this.appGui.guiLink();
       }
     }
     
