@@ -1,9 +1,11 @@
 package DiezeFond;
 
-import fr.sma.speadl.EnvironmentHandler;
+import fr.sma.speadl.EnvironmentUpdater;
+import fr.sma.speadl.GridDataProvider;
+import fr.sma.speadl.GridUpdater;
 
 @SuppressWarnings("all")
-public abstract class Environment {
+public abstract class GridManager {
   @SuppressWarnings("all")
   public interface Requires {
   }
@@ -15,12 +17,24 @@ public abstract class Environment {
      * This can be called to access the provided port.
      * 
      */
-    public EnvironmentHandler environmentHandler();
+    public EnvironmentUpdater updateEnvironment();
+    
+    /**
+     * This can be called to access the provided port.
+     * 
+     */
+    public GridUpdater updateGrid();
+    
+    /**
+     * This can be called to access the provided port.
+     * 
+     */
+    public GridDataProvider dataProvider();
   }
   
   
   @SuppressWarnings("all")
-  public interface Component extends Environment.Provides {
+  public interface Component extends GridManager.Provides {
   }
   
   
@@ -30,10 +44,10 @@ public abstract class Environment {
   
   
   @SuppressWarnings("all")
-  public static class ComponentImpl implements Environment.Component, Environment.Parts {
-    private final Environment.Requires bridge;
+  public static class ComponentImpl implements GridManager.Component, GridManager.Parts {
+    private final GridManager.Requires bridge;
     
-    private final Environment implementation;
+    private final GridManager implementation;
     
     public void start() {
       this.implementation.start();
@@ -46,15 +60,25 @@ public abstract class Environment {
     }
     
     protected void initProvidedPorts() {
-      assert this.environmentHandler == null: "This is a bug.";
-      this.environmentHandler = this.implementation.make_environmentHandler();
-      if (this.environmentHandler == null) {
-      	throw new RuntimeException("make_environmentHandler() in DiezeFond.Environment should not return null.");
+      assert this.updateEnvironment == null: "This is a bug.";
+      this.updateEnvironment = this.implementation.make_updateEnvironment();
+      if (this.updateEnvironment == null) {
+      	throw new RuntimeException("make_updateEnvironment() in DiezeFond.GridManager should not return null.");
+      }
+      assert this.updateGrid == null: "This is a bug.";
+      this.updateGrid = this.implementation.make_updateGrid();
+      if (this.updateGrid == null) {
+      	throw new RuntimeException("make_updateGrid() in DiezeFond.GridManager should not return null.");
+      }
+      assert this.dataProvider == null: "This is a bug.";
+      this.dataProvider = this.implementation.make_dataProvider();
+      if (this.dataProvider == null) {
+      	throw new RuntimeException("make_dataProvider() in DiezeFond.GridManager should not return null.");
       }
       
     }
     
-    public ComponentImpl(final Environment implem, final Environment.Requires b, final boolean doInits) {
+    public ComponentImpl(final GridManager implem, final GridManager.Requires b, final boolean doInits) {
       this.bridge = b;
       this.implementation = implem;
       
@@ -71,10 +95,22 @@ public abstract class Environment {
       
     }
     
-    private EnvironmentHandler environmentHandler;
+    private EnvironmentUpdater updateEnvironment;
     
-    public final EnvironmentHandler environmentHandler() {
-      return this.environmentHandler;
+    public final EnvironmentUpdater updateEnvironment() {
+      return this.updateEnvironment;
+    }
+    
+    private GridUpdater updateGrid;
+    
+    public final GridUpdater updateGrid() {
+      return this.updateGrid;
+    }
+    
+    private GridDataProvider dataProvider;
+    
+    public final GridDataProvider dataProvider() {
+      return this.dataProvider;
     }
   }
   
@@ -92,7 +128,7 @@ public abstract class Environment {
    */
   private boolean started = false;;
   
-  private Environment.ComponentImpl selfComponent;
+  private GridManager.ComponentImpl selfComponent;
   
   /**
    * Can be overridden by the implementation.
@@ -110,7 +146,7 @@ public abstract class Environment {
    * This can be called by the implementation to access the provided ports.
    * 
    */
-  protected Environment.Provides provides() {
+  protected GridManager.Provides provides() {
     assert this.selfComponent != null: "This is a bug.";
     if (!this.init) {
     	throw new RuntimeException("provides() can't be accessed until a component has been created from this implementation, use start() instead of the constructor if provides() is needed to initialise the component.");
@@ -124,13 +160,27 @@ public abstract class Environment {
    * This will be called once during the construction of the component to initialize the port.
    * 
    */
-  protected abstract EnvironmentHandler make_environmentHandler();
+  protected abstract EnvironmentUpdater make_updateEnvironment();
+  
+  /**
+   * This should be overridden by the implementation to define the provided port.
+   * This will be called once during the construction of the component to initialize the port.
+   * 
+   */
+  protected abstract GridUpdater make_updateGrid();
+  
+  /**
+   * This should be overridden by the implementation to define the provided port.
+   * This will be called once during the construction of the component to initialize the port.
+   * 
+   */
+  protected abstract GridDataProvider make_dataProvider();
   
   /**
    * This can be called by the implementation to access the required ports.
    * 
    */
-  protected Environment.Requires requires() {
+  protected GridManager.Requires requires() {
     assert this.selfComponent != null: "This is a bug.";
     if (!this.init) {
     	throw new RuntimeException("requires() can't be accessed until a component has been created from this implementation, use start() instead of the constructor if requires() is needed to initialise the component.");
@@ -143,7 +193,7 @@ public abstract class Environment {
    * This can be called by the implementation to access the parts and their provided ports.
    * 
    */
-  protected Environment.Parts parts() {
+  protected GridManager.Parts parts() {
     assert this.selfComponent != null: "This is a bug.";
     if (!this.init) {
     	throw new RuntimeException("parts() can't be accessed until a component has been created from this implementation, use start() instead of the constructor if parts() is needed to initialise the component.");
@@ -156,12 +206,12 @@ public abstract class Environment {
    * Not meant to be used to manually instantiate components (except for testing).
    * 
    */
-  public synchronized Environment.Component _newComponent(final Environment.Requires b, final boolean start) {
+  public synchronized GridManager.Component _newComponent(final GridManager.Requires b, final boolean start) {
     if (this.init) {
-    	throw new RuntimeException("This instance of Environment has already been used to create a component, use another one.");
+    	throw new RuntimeException("This instance of GridManager has already been used to create a component, use another one.");
     }
     this.init = true;
-    Environment.ComponentImpl comp = new Environment.ComponentImpl(this, b, true);
+    GridManager.ComponentImpl comp = new GridManager.ComponentImpl(this, b, true);
     if (start) {
     	comp.start();
     }
@@ -173,7 +223,7 @@ public abstract class Environment {
    * Use to instantiate a component from this implementation.
    * 
    */
-  public Environment.Component newComponent() {
-    return this._newComponent(new Environment.Requires() {}, true);
+  public GridManager.Component newComponent() {
+    return this._newComponent(new GridManager.Requires() {}, true);
   }
 }

@@ -2,36 +2,63 @@ package fr.sma.speadl.impl;
 
 import javax.swing.JFrame;
 
-import fr.sma.core.EnvironmentGui;
-import fr.sma.speadl.GuiHandler;
-import DiezeFond.Environment;
-import DiezeFond.Gui;
+import fr.sma.speadl.EnvironmentRenderer;
+import DiezeFond.AppGUI;
+import DiezeFond.Ecosystem.GUI;
+import DiezeFond.EnvironmentGUI;
 
-public class GuiImpl extends Gui {
+public class GuiImpl extends GUI {
+
+
+	private JFrame window;
+
+	public GuiImpl() {
+		window = new JFrame();
+		window.setSize(840, 560);
+		window.setResizable(false);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
+	}
 
 	@Override
-	protected GuiHandler make_guiHandler() {
-		return new GuiHandler() {
-			
+	protected EnvironmentGUI make_environmentGui() {
+		
+		return new EnvironmentGUI() {
+
 			@Override
-			public void init() {
-				Environment.Component environment = (new EnvironmentImpl()).newComponent();
-				environment.environmentHandler().setObstacle(25, 35);
-				environment.environmentHandler().setExpeditionArea(0, 10, 10, 30);
-				environment.environmentHandler().setReceptionArea(70, 10, 10, 30);
-				environment.environmentHandler().addCorridor(0);
-				environment.environmentHandler().addCorridor(49);
-				EnvironmentGui grid = new EnvironmentGui(environment.environmentHandler());
+			protected EnvironmentRenderer make_renderEnvironment() {
+				return new EnvironmentRenderer() {
 
-				JFrame window = new JFrame();
-				window.setSize(840, 560);
-				window.setResizable(false);
-				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					@Override
+					public void refresh() {
 
-				window.add(grid);
-				window.setVisible(true);
+					}
+				};
 			}
 		};
 	}
+
+	@Override
+	protected AppGUI make_appGui() {
+		return new AppGUI() {
+
+		};
+	}
+
+	/*
+	 * 
+	 * environment.environmentHandler().setObstacle(25, 35);
+	 * environment.environmentHandler().setExpeditionArea(0, 10, 10, 30);
+	 * environment.environmentHandler().setReceptionArea(70, 10, 10, 30);
+	 * environment.environmentHandler().addCorridor(0);
+	 * environment.environmentHandler().addCorridor(49); EnvironmentGui grid =
+	 * new EnvironmentGui(environment.environmentHandler());
+	 * 
+	 * JFrame window = new JFrame(); window.setSize(840, 560);
+	 * window.setResizable(false);
+	 * window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 * 
+	 * window.add(grid); window.setVisible(true);
+	 */
 
 }

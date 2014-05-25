@@ -1,20 +1,96 @@
-
-
-import fr.sma.speadl.GuiHandler
-import fr.sma.speadl.RobotHandler
-import fr.sma.speadl.EnvironmentHandler
+import fr.sma.speadl.ActionHandler
+import fr.sma.speadl.EnvironmentRenderer
+import fr.sma.speadl.EnvironmentUpdater
+import fr.sma.speadl.GridDataProvider
+import fr.sma.speadl.GridUpdater
+import fr.sma.speadl.MemoryHandler
+import fr.sma.speadl.MoveHandler
 
 namespace DiezeFond {
-	
-	component Gui {
-		provides guiHandler : GuiHandler 		
+
+	/* Robot components */
+	component RobotMemory {
+		provides memoryHandler: MemoryHandler
 	}
 	
-	component RobotFactory {
-		provides robotHandler : RobotHandler	
+	component RobotActionManager {
+		provides actionHandler: ActionHandler
+		requires memoryHandler: MemoryHandler
+		requires moveHandler: MoveHandler
 	}
 	
-	component Environment {
-		provides environmentHandler : EnvironmentHandler
+	/* Environment components */
+	component EnvironmentMove {
+		provides moveHandler: MoveHandler
+		requires updateGrid: GridUpdater
 	}
+	
+	component EnvironmentClock {
+		requires renderEnvironment: EnvironmentRenderer
+		requires actionHandler: ActionHandler
+	}
+	
+	component GridManager {
+		provides updateEnvironment: EnvironmentUpdater
+		provides updateGrid: GridUpdater
+		provides dataProvider: GridDataProvider
+	}
+	
+	/* GUI components */
+	component AppGUI {
+		requires updateEnvironment: EnvironmentUpdater
+	}
+	
+	component EnvironmentGUI {
+		provides renderEnvironment: EnvironmentRenderer
+		requires dataProvider: GridDataProvider
+	}
+
+	ecosystem Ecosystem {
+		species Robot {
+			requires environmentMoveHandler : MoveHandler
+			provides robotActionHandler : ActionHandler = actionManager.actionHandler
+			
+			part memory: RobotMemory
+			part actionManager: RobotActionManager {
+				bind memoryHandler to memory.memoryHandler
+				bind moveHandler to environmentMoveHandler
+			}
+		}
+		
+		species Environment {
+			provides environmentMovedHandler : MoveHandler = move.moveHandler
+			requires robotActionHandler : ActionHandler
+			
+			provides updateEnvironment : EnvironmentUpdater = gridManager.updateEnvironment
+			provides dataProvider : GridDataProvider
+			requires guiRenderEnvironment : EnvironmentRenderer
+			
+			part clock: EnvironmentClock {
+				bind actionHandler to robotActionHandler
+				bind renderEnvironment to guiRenderEnvironment
+			}
+
+			part move: EnvironmentMove {
+				bind updateGrid to gridManager.updateGrid
+			}
+		
+			part gridManager : GridManager
+				
+		}
+		
+		species GUI {
+			provides renderEnvironment : EnvironmentRenderer = environmentGui.renderEnvironment
+			requires gridUpdateEnvironment : EnvironmentUpdater
+			requires gridDataProvider : GridDataProvider
+			
+			part environmentGui : EnvironmentGUI {
+				bind dataProvider to gridDataProvider
+			}
+		
+			part appGui : AppGUI {
+				bind updateEnvironment to gridUpdateEnvironment
+			}
+		}
+	}	
 }

@@ -2,19 +2,20 @@ package fr.sma.core;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import javax.swing.JPanel;
 
-import fr.sma.speadl.EnvironmentHandler;
+import fr.sma.speadl.EnvironmentUpdater;
+import fr.sma.speadl.GridDataProvider;
 
-public class EnvironmentGui extends JPanel {
+public class GridGui extends JPanel {
 
 	private static final long serialVersionUID = -3656866293410119738L;
-
-	EnvironmentHandler environment;
-
-	public EnvironmentGui(EnvironmentHandler environment) {
-		this.environment = environment;
-
+	
+	private GridDataProvider provider;
+	
+	public GridGui(GridDataProvider provider) {
+		this.provider = provider;
 	}
 
 	private void drawCell(Graphics g, int x, int y, Color color) {
@@ -29,10 +30,10 @@ public class EnvironmentGui extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		for (int i = 0; i < EnvironmentHandler.GRID_WIDTH; i++) {
-			for (int j = 0; j < EnvironmentHandler.GRID_HEIGHT; j++) {
+		for (int i = 0; i < EnvironmentUpdater.GRID_WIDTH; i++) {
+			for (int j = 0; j < EnvironmentUpdater.GRID_HEIGHT; j++) {
 				Color color;
-				switch (environment.getState(i, j)) {
+				switch (provider.getState(i, j)) {
 				case EXPEDITION:
 				case DESTINATION:
 					color = Color.DARK_GRAY;

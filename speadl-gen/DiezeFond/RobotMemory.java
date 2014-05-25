@@ -1,9 +1,9 @@
 package DiezeFond;
 
-import fr.sma.speadl.GuiHandler;
+import fr.sma.speadl.MemoryHandler;
 
 @SuppressWarnings("all")
-public abstract class Gui {
+public abstract class RobotMemory {
   @SuppressWarnings("all")
   public interface Requires {
   }
@@ -15,12 +15,12 @@ public abstract class Gui {
      * This can be called to access the provided port.
      * 
      */
-    public GuiHandler guiHandler();
+    public MemoryHandler memoryHandler();
   }
   
   
   @SuppressWarnings("all")
-  public interface Component extends Gui.Provides {
+  public interface Component extends RobotMemory.Provides {
   }
   
   
@@ -30,10 +30,10 @@ public abstract class Gui {
   
   
   @SuppressWarnings("all")
-  public static class ComponentImpl implements Gui.Component, Gui.Parts {
-    private final Gui.Requires bridge;
+  public static class ComponentImpl implements RobotMemory.Component, RobotMemory.Parts {
+    private final RobotMemory.Requires bridge;
     
-    private final Gui implementation;
+    private final RobotMemory implementation;
     
     public void start() {
       this.implementation.start();
@@ -46,15 +46,15 @@ public abstract class Gui {
     }
     
     protected void initProvidedPorts() {
-      assert this.guiHandler == null: "This is a bug.";
-      this.guiHandler = this.implementation.make_guiHandler();
-      if (this.guiHandler == null) {
-      	throw new RuntimeException("make_guiHandler() in DiezeFond.Gui should not return null.");
+      assert this.memoryHandler == null: "This is a bug.";
+      this.memoryHandler = this.implementation.make_memoryHandler();
+      if (this.memoryHandler == null) {
+      	throw new RuntimeException("make_memoryHandler() in DiezeFond.RobotMemory should not return null.");
       }
       
     }
     
-    public ComponentImpl(final Gui implem, final Gui.Requires b, final boolean doInits) {
+    public ComponentImpl(final RobotMemory implem, final RobotMemory.Requires b, final boolean doInits) {
       this.bridge = b;
       this.implementation = implem;
       
@@ -71,10 +71,10 @@ public abstract class Gui {
       
     }
     
-    private GuiHandler guiHandler;
+    private MemoryHandler memoryHandler;
     
-    public final GuiHandler guiHandler() {
-      return this.guiHandler;
+    public final MemoryHandler memoryHandler() {
+      return this.memoryHandler;
     }
   }
   
@@ -92,7 +92,7 @@ public abstract class Gui {
    */
   private boolean started = false;;
   
-  private Gui.ComponentImpl selfComponent;
+  private RobotMemory.ComponentImpl selfComponent;
   
   /**
    * Can be overridden by the implementation.
@@ -110,7 +110,7 @@ public abstract class Gui {
    * This can be called by the implementation to access the provided ports.
    * 
    */
-  protected Gui.Provides provides() {
+  protected RobotMemory.Provides provides() {
     assert this.selfComponent != null: "This is a bug.";
     if (!this.init) {
     	throw new RuntimeException("provides() can't be accessed until a component has been created from this implementation, use start() instead of the constructor if provides() is needed to initialise the component.");
@@ -124,13 +124,13 @@ public abstract class Gui {
    * This will be called once during the construction of the component to initialize the port.
    * 
    */
-  protected abstract GuiHandler make_guiHandler();
+  protected abstract MemoryHandler make_memoryHandler();
   
   /**
    * This can be called by the implementation to access the required ports.
    * 
    */
-  protected Gui.Requires requires() {
+  protected RobotMemory.Requires requires() {
     assert this.selfComponent != null: "This is a bug.";
     if (!this.init) {
     	throw new RuntimeException("requires() can't be accessed until a component has been created from this implementation, use start() instead of the constructor if requires() is needed to initialise the component.");
@@ -143,7 +143,7 @@ public abstract class Gui {
    * This can be called by the implementation to access the parts and their provided ports.
    * 
    */
-  protected Gui.Parts parts() {
+  protected RobotMemory.Parts parts() {
     assert this.selfComponent != null: "This is a bug.";
     if (!this.init) {
     	throw new RuntimeException("parts() can't be accessed until a component has been created from this implementation, use start() instead of the constructor if parts() is needed to initialise the component.");
@@ -156,12 +156,12 @@ public abstract class Gui {
    * Not meant to be used to manually instantiate components (except for testing).
    * 
    */
-  public synchronized Gui.Component _newComponent(final Gui.Requires b, final boolean start) {
+  public synchronized RobotMemory.Component _newComponent(final RobotMemory.Requires b, final boolean start) {
     if (this.init) {
-    	throw new RuntimeException("This instance of Gui has already been used to create a component, use another one.");
+    	throw new RuntimeException("This instance of RobotMemory has already been used to create a component, use another one.");
     }
     this.init = true;
-    Gui.ComponentImpl comp = new Gui.ComponentImpl(this, b, true);
+    RobotMemory.ComponentImpl comp = new RobotMemory.ComponentImpl(this, b, true);
     if (start) {
     	comp.start();
     }
@@ -173,7 +173,7 @@ public abstract class Gui {
    * Use to instantiate a component from this implementation.
    * 
    */
-  public Gui.Component newComponent() {
-    return this._newComponent(new Gui.Requires() {}, true);
+  public RobotMemory.Component newComponent() {
+    return this._newComponent(new RobotMemory.Requires() {}, true);
   }
 }
