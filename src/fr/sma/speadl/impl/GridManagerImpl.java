@@ -1,5 +1,8 @@
 package fr.sma.speadl.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import fr.sma.core.Cell;
 import fr.sma.core.State;
 import fr.sma.speadl.EnvironmentUpdater;
@@ -8,6 +11,8 @@ import fr.sma.speadl.GridUpdater;
 import DiezeFond.GridManager;
 
 public class GridManagerImpl extends GridManager {
+	
+	private final static Logger LOGGER = Logger.getLogger(GridManagerImpl.class.getName());
 
 	private Cell[][] grid;
 	private int obstacleX;
@@ -29,6 +34,7 @@ public class GridManagerImpl extends GridManager {
 			@Override
 			public void setExpeditionArea(int x, int y, int width,
 					int height) {
+				LOGGER.log(Level.INFO, "Creating expedition area: (" + x + ", " + y + "); width: " + width + "; height: " + height);
 				for (int i = x; i < x + width; i++) {
 					for (int j = y; j < y + height; j++) {
 						grid[i][j].setState(State.EXPEDITION);
@@ -39,6 +45,7 @@ public class GridManagerImpl extends GridManager {
 			@Override
 			public void setReceptionArea(int x, int y, int width,
 					int height) {
+				LOGGER.log(Level.INFO, "Creating reception area: (" + x + ", " + y + "); width: " + width + "; height: " + height);
 				for (int i = x; i < x + width; i++) {
 					for (int j = y; j < y + height; j++) {
 						grid[i][j].setState(State.DESTINATION);
@@ -48,6 +55,7 @@ public class GridManagerImpl extends GridManager {
 
 			@Override
 			public void setObstacle(int x, int width) {
+				LOGGER.log(Level.INFO, "Creating obstacle on column: " + x +  "; width: " + width);
 				for (int i = x; i < x + width; i++) {
 					for (int j = 0; j < EnvironmentUpdater.GRID_HEIGHT; j++) {
 						grid[i][j].setState(State.OBSTACLE);
@@ -59,6 +67,7 @@ public class GridManagerImpl extends GridManager {
 
 			@Override
 			public void addCorridor(int y) {
+				LOGGER.log(Level.INFO, "Creating corridor on line: " + y);
 				for (int i = 0; i < EnvironmentUpdater.GRID_WIDTH; i++) {
 					if (grid[i][y].getState() == State.OBSTACLE) {
 						grid[i][y].setState(State.FREESPACE);
@@ -68,6 +77,7 @@ public class GridManagerImpl extends GridManager {
 
 			@Override
 			public void removeCorridor(int y) {
+				LOGGER.log(Level.INFO, "Removing corridor on line: " + y);
 				for (int i = obstacleX; i < obstacleX + obstacleWidth; i++) {
 					if (grid[i][y].getState() == State.OBSTACLE) {
 						grid[i][y].setState(State.FREESPACE);

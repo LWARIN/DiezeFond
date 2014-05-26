@@ -1,6 +1,7 @@
 package fr.sma.core;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -12,6 +13,10 @@ public class GridGui extends JPanel {
 	private static final long serialVersionUID = -3656866293410119738L;
 	
 	private Cell[][] content;
+	
+	public GridGui() {
+		setPreferredSize(new Dimension(850, 550));
+	}
 
 	private void drawCell(Graphics g, int x, int y, Color color) {
 		g.setColor(color);
@@ -23,7 +28,7 @@ public class GridGui extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		//super.paintComponent(g);
 		
 		System.out.println("############## PAINT ME ######################");
 

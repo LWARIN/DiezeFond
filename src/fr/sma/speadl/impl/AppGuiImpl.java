@@ -3,18 +3,22 @@ package fr.sma.speadl.impl;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import fr.sma.speadl.GuiConnector;
 import DiezeFond.AppGUI;
+import fr.sma.speadl.GuiConnector;
 
 public class AppGuiImpl extends AppGUI {
 
 	private JFrame window;
+	private JPanel container;
 
 	public AppGuiImpl() {
 		window = new JFrame();
-		window.setSize(840, 560);
+		container = new JPanel();
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setContentPane(container);
+		window.pack();
+		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 	}
 
@@ -25,9 +29,11 @@ public class AppGuiImpl extends AppGUI {
 			@Override
 			public void setEnvironmentGui(JPanel content) {
 				System.out.println("APP GUI SET ENVIRONMENT GUI");
-				window.removeAll();
+				container.removeAll();
 				System.out.println(content.getSize());
-				window.add(content);
+				container.add(content);
+				window.pack();
+				window.setLocationRelativeTo(null);
 			}
 		};
 	}
