@@ -3,8 +3,12 @@ package fr.sma.speadl.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.sma.core.Cell;
+import fr.sma.core.Position;
 import fr.sma.speadl.ActionHandler;
+import fr.sma.speadl.EnvironmentUpdater;
 import fr.sma.speadl.MoveHandler;
+import fr.sma.speadl.MoveTrigger;
 import DiezeFond.AppGUI;
 import DiezeFond.EcoEnvironment;
 import DiezeFond.EnvironmentClock;
@@ -37,11 +41,44 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 				return new MoveHandler() {
 
 					@Override
+					public List<Cell> getNeighbors(Position current) {
+						System.out.println("GET NEIGHBORS");
+						int x = current.getX();
+						int y = current.getY();
+
+						int xMin = (x - 3) <= 0 ? 0 : (x - 3);
+						int xMax = (x + 3) >= EnvironmentUpdater.GRID_WIDTH - 1 ? EnvironmentUpdater.GRID_WIDTH - 1
+								: (x + 3);
+
+						int yMin = (y - 3) <= 0 ? 0 : (y - 3);
+						int yMax = (y + 3) > EnvironmentUpdater.GRID_HEIGHT - 1 ? EnvironmentUpdater.GRID_HEIGHT - 1
+								: (y + 3);
+
+						List<Cell> neighbors = new ArrayList<Cell>();
+						for (int i = xMin; i < xMax; i++) {
+							for (int j = yMin; j < yMax; j++) {
+								Cell cell = new Cell(new Position(i, j));
+								cell.setState(requires().updateGrid().getState(i, j));
+								neighbors.add(cell);
+							}
+						}
+
+						return neighbors;
+					}
+				};
+			}
+
+			@Override
+			protected MoveTrigger make_moveTrigger() {
+				return new MoveTrigger() {
+
+					@Override
 					public void moveAgents() {
 						for (Robot.Component robot : robots) {
 							robot.robotActionHandler().triggerAction();
 						}
 					}
+
 				};
 			}
 
@@ -74,7 +111,7 @@ public class EcoEnvironmentImpl extends EcoEnvironment {
 
 			@Override
 			public void triggerAction() {
-				
+
 			}
 		};
 	}

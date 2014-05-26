@@ -6,6 +6,7 @@ import fr.sma.speadl.GridUpdater
 import fr.sma.speadl.GuiConnector
 import fr.sma.speadl.MoveHandler
 import fr.sma.speadl.MemoryHandler
+import fr.sma.speadl.MoveTrigger
 
 namespace DiezeFond {
 
@@ -24,11 +25,12 @@ namespace DiezeFond {
 		requires actionHandler: ActionHandler
 		requires updateGrid: GridUpdater
 		provides moveHandler: MoveHandler
+		provides moveTrigger : MoveTrigger
 	}
 	
 	component EnvironmentClock {
 		requires renderEnvironment: EnvironmentRenderer
-		requires moveHandler: MoveHandler
+		requires moveTrigger : MoveTrigger
 	}
 	
 	component GridManager {
@@ -50,6 +52,7 @@ namespace DiezeFond {
 	}
 
 	ecosystem EcoEnvironment {
+		provides moveHandler : MoveHandler = move.moveHandler
 		provides actionHandler : ActionHandler
 		provides gridHandler : EnvironmentUpdater = gridManager.updateEnvironment
 		provides environmentGuiHandler : EnvironmentRenderer = environmentGui.renderEnvironment
@@ -66,7 +69,7 @@ namespace DiezeFond {
 		}
 
 		part clock: EnvironmentClock {
-			bind moveHandler to move.moveHandler
+			bind moveTrigger to move.moveTrigger
 			bind renderEnvironment to environmentGui.renderEnvironment
 		}
 

@@ -15,6 +15,7 @@ import fr.sma.speadl.GridUpdater;
 import fr.sma.speadl.GuiConnector;
 import fr.sma.speadl.MemoryHandler;
 import fr.sma.speadl.MoveHandler;
+import fr.sma.speadl.MoveTrigger;
 
 @SuppressWarnings("all")
 public abstract class EcoEnvironment {
@@ -25,6 +26,12 @@ public abstract class EcoEnvironment {
   
   @SuppressWarnings("all")
   public interface Provides {
+    /**
+     * This can be called to access the provided port.
+     * 
+     */
+    public MoveHandler moveHandler();
+    
     /**
      * This can be called to access the provided port.
      * 
@@ -176,6 +183,10 @@ public abstract class EcoEnvironment {
       
     }
     
+    public final MoveHandler moveHandler() {
+      return this.move.moveHandler();
+    }
+    
     private ActionHandler actionHandler;
     
     public final ActionHandler actionHandler() {
@@ -212,8 +223,8 @@ public abstract class EcoEnvironment {
     
     @SuppressWarnings("all")
     private final class BridgeImpl_clock implements EnvironmentClock.Requires {
-      public final MoveHandler moveHandler() {
-        return EcoEnvironment.ComponentImpl.this.move.moveHandler();
+      public final MoveTrigger moveTrigger() {
+        return EcoEnvironment.ComponentImpl.this.move.moveTrigger();
       }
       
       public final EnvironmentRenderer renderEnvironment() {

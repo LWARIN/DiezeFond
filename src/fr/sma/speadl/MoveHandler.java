@@ -1,6 +1,11 @@
 package fr.sma.speadl;
 
-public interface MoveHandler {
+import java.util.List;
 
-	public void moveAgents();
+import fr.sma.core.Cell;
+import fr.sma.core.Position;
+
+public interface MoveHandler {
+	
+	public List<Cell> getNeighbors(Position current);
 }

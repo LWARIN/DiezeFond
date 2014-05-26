@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import fr.sma.core.Cell;
+import fr.sma.core.Position;
 import fr.sma.core.State;
 import fr.sma.speadl.EnvironmentUpdater;
 import fr.sma.speadl.GridDataProvider;
@@ -22,7 +23,7 @@ public class GridManagerImpl extends GridManager {
 		grid = new Cell[EnvironmentUpdater.GRID_WIDTH][EnvironmentUpdater.GRID_HEIGHT];
 		for (int i = 0; i < EnvironmentUpdater.GRID_WIDTH; ++i) {
 			for (int j = 0; j < EnvironmentUpdater.GRID_HEIGHT; ++j) {
-				grid[i][j] = new Cell();
+				grid[i][j] = new Cell(new Position(i, j));
 			}
 		}
 	}

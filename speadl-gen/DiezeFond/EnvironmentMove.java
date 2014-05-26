@@ -3,6 +3,7 @@ package DiezeFond;
 import fr.sma.speadl.ActionHandler;
 import fr.sma.speadl.GridUpdater;
 import fr.sma.speadl.MoveHandler;
+import fr.sma.speadl.MoveTrigger;
 
 @SuppressWarnings("all")
 public abstract class EnvironmentMove {
@@ -29,6 +30,12 @@ public abstract class EnvironmentMove {
      * 
      */
     public MoveHandler moveHandler();
+    
+    /**
+     * This can be called to access the provided port.
+     * 
+     */
+    public MoveTrigger moveTrigger();
   }
   
   
@@ -64,6 +71,11 @@ public abstract class EnvironmentMove {
       if (this.moveHandler == null) {
       	throw new RuntimeException("make_moveHandler() in DiezeFond.EnvironmentMove should not return null.");
       }
+      assert this.moveTrigger == null: "This is a bug.";
+      this.moveTrigger = this.implementation.make_moveTrigger();
+      if (this.moveTrigger == null) {
+      	throw new RuntimeException("make_moveTrigger() in DiezeFond.EnvironmentMove should not return null.");
+      }
       
     }
     
@@ -88,6 +100,12 @@ public abstract class EnvironmentMove {
     
     public final MoveHandler moveHandler() {
       return this.moveHandler;
+    }
+    
+    private MoveTrigger moveTrigger;
+    
+    public final MoveTrigger moveTrigger() {
+      return this.moveTrigger;
     }
   }
   
@@ -138,6 +156,13 @@ public abstract class EnvironmentMove {
    * 
    */
   protected abstract MoveHandler make_moveHandler();
+  
+  /**
+   * This should be overridden by the implementation to define the provided port.
+   * This will be called once during the construction of the component to initialize the port.
+   * 
+   */
+  protected abstract MoveTrigger make_moveTrigger();
   
   /**
    * This can be called by the implementation to access the required ports.
