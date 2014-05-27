@@ -1,11 +1,9 @@
-
-
-import fr.sma.fond.speadl.MemoryManager
 import fr.sma.core.Position
-import fr.sma.fond.speadl.GridManager
 import fr.sma.fond.speadl.ActionManager
+import fr.sma.fond.speadl.EcoRobotManager
+import fr.sma.fond.speadl.GridManager
 import fr.sma.fond.speadl.InitManager
-import fr.sma.fond.speadl.ScheduledGrid
+import fr.sma.fond.speadl.MemoryManager
 
 namespace Fond {
 	
@@ -20,6 +18,7 @@ namespace Fond {
 	
 	ecosystem EcoRobot {
 		requires gridManager : GridManager
+		provides ecoRobotManager : EcoRobotManager
 		
 		species Robot (id : String, position : Position) {
 			part memory: RobotMemory
@@ -33,26 +32,24 @@ namespace Fond {
 	}
 	
 	component Grid {
-		provides scheduledGrid : ScheduledGrid
 		provides gridManager : GridManager
 	} 
 	
 	component Clock {
-		requires scheduledGrid : ScheduledGrid
+		requires ecoRobot : EcoRobotManager
 	}
 	
 	component Plant {
 		provides initManager : InitManager
-		provides gridManager : GridManager = grid.gridManager
 		
 		part grid : Grid
 		
 		part robots : EcoRobot {
-			bind gridManager to gridManager
+			bind gridManager to grid.gridManager
 		}
 		
 		part clock : Clock{
-			bind scheduledGrid to grid.scheduledGrid
+			bind ecoRobot to robots.ecoRobotManager
 		}
 	}
 }
