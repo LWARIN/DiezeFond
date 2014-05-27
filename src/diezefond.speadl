@@ -1,0 +1,58 @@
+
+
+import fr.sma.fond.speadl.MemoryManager
+import fr.sma.core.Position
+import fr.sma.fond.speadl.GridManager
+import fr.sma.fond.speadl.ActionManager
+import fr.sma.fond.speadl.InitManager
+import fr.sma.fond.speadl.ScheduledGrid
+
+namespace Fond {
+	
+	component RobotMemory {
+		provides memoryManager : MemoryManager
+	}
+	
+	component  RobotActionManager {
+		provides actionManager : ActionManager
+		requires memoryManager : MemoryManager
+	} 
+	
+	ecosystem EcoRobot {
+		requires gridManager : GridManager
+		
+		species Robot (id : String, position : Position) {
+			part memory: RobotMemory
+			
+			part actionManager: RobotActionManager {
+				bind memoryManager to memory.memoryManager
+			}
+			
+			provides robotActionHandler : ActionManager = actionManager.actionManager
+		}
+	}
+	
+	component Grid {
+		provides scheduledGrid : ScheduledGrid
+		provides gridManager : GridManager
+	} 
+	
+	component Clock {
+		requires scheduledGrid : ScheduledGrid
+	}
+	
+	component Plant {
+		provides initManager : InitManager
+		provides gridManager : GridManager = grid.gridManager
+		
+		part grid : Grid
+		
+		part robots : EcoRobot {
+			bind gridManager to gridManager
+		}
+		
+		part clock : Clock{
+			bind scheduledGrid to grid.scheduledGrid
+		}
+	}
+}
