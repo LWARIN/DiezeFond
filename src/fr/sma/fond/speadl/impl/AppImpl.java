@@ -1,11 +1,14 @@
 package fr.sma.fond.speadl.impl;
 
-import fr.sma.fond.speadl.GridManager;
 import Fond.App;
-import Fond.AppGUI;
 import Fond.Clock;
+
 import Fond.Logger;
+
+import Fond.Gui;
+
 import Fond.Plant;
+import fr.sma.fond.speadl.GridManager;
 
 public class AppImpl extends App {
 
@@ -15,7 +18,7 @@ public class AppImpl extends App {
 	}
 
 	@Override
-	protected AppGUI make_gui() {
+	protected Gui make_gui() {
 		return new AppGuiImpl(GridManager.GRID_WIDTH, GridManager.GRID_HEIGHT);
 	}
 

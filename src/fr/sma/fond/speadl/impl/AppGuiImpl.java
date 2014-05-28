@@ -8,13 +8,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Fond.Gui;
+
 import fr.sma.core.Cell;
 import fr.sma.core.GridGui;
 import fr.sma.fond.speadl.IGuiUpdate;
-import Fond.AppGUI;
-
-public class AppGuiImpl extends AppGUI {
 		
+public class AppGuiImpl extends Gui {
+	
 	private JFrame window;
 	private JPanel container;
 	
