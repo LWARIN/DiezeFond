@@ -4,6 +4,7 @@ import fr.sma.fond.speadl.EcoRobotManager
 import fr.sma.fond.speadl.GridManager
 import fr.sma.fond.speadl.InitManager
 import fr.sma.fond.speadl.MemoryManager
+import fr.sma.fond.speadl.GridProvider
 
 namespace Fond {
 	
@@ -17,7 +18,7 @@ namespace Fond {
 	} 
 	
 	ecosystem EcoRobot {
-		requires gridManager : GridManager
+		requires gridProvider : GridProvider
 		provides ecoRobotManager : EcoRobotManager
 		
 		species Robot (id : String, position : Position) {
@@ -33,6 +34,7 @@ namespace Fond {
 	
 	component Grid {
 		provides gridManager : GridManager
+		provides gridProvider : GridProvider
 	} 
 	
 	component Clock {
@@ -45,11 +47,24 @@ namespace Fond {
 		part grid : Grid
 		
 		part robots : EcoRobot {
-			bind gridManager to grid.gridManager
+			bind gridProvider to grid.gridProvider
 		}
 		
 		part clock : Clock{
 			bind ecoRobot to robots.ecoRobotManager
 		}
+	}
+	
+	component AppGUI {
+		
+	}
+	
+	component PlantGUI {
+		
+	}
+	
+	component GUI {
+		part appGui : AppGUI
+		part plantGUI : PlantGUI
 	}
 }

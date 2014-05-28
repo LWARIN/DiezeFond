@@ -6,7 +6,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import fr.sma.speadl.EnvironmentUpdater;
+import fr.sma.fond.speadl.GridManager;
 
 public class GridGui extends JPanel {
 
@@ -32,8 +32,8 @@ public class GridGui extends JPanel {
 		
 		System.out.println("############## PAINT ME ######################");
 
-		for (int i = 0; i < EnvironmentUpdater.GRID_WIDTH; i++) {
-			for (int j = 0; j < EnvironmentUpdater.GRID_HEIGHT; j++) {
+		for (int i = 0; i < GridManager.GRID_WIDTH; i++) {
+			for (int j = 0; j < GridManager.GRID_HEIGHT; j++) {
 				Color color;
 				switch (content[i][j].getState()) {
 				case EXPEDITION:
