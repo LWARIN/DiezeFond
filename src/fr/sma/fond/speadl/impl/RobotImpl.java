@@ -46,7 +46,7 @@ public class RobotImpl extends Robot {
 
 					@Override
 					public void move() {
-						LOGGER.info("I SHALL MOVE #" + id + " FROM POSITION : " + currentPosition);
+						LOGGER.info("I SHALL MOVE " + id + " FROM POSITION : " + currentPosition);
 
 						List<Cell> neighbors = eco_requires().gridProvider().getNeighbors(currentPosition);
 						LOGGER.info("#" + id + ": My neighbors are : ");

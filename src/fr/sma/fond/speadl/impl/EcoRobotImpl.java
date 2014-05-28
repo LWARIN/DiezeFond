@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import fr.sma.core.Cell;
 import fr.sma.core.Position;
 import fr.sma.fond.speadl.EcoRobotManager;
 import Fond.EcoRobot;
@@ -15,7 +14,8 @@ public class EcoRobotImpl extends EcoRobot {
 
 	private List<Robot.Component> robots;
 
-	public EcoRobotImpl() {
+	@Override
+	protected void start() {
 		robots = new ArrayList<Robot.Component>();
 		for (int i = 0; i < 10; i++) {
 			robots.add(newRobot("#id" + i, new Position(0, 0)));
@@ -28,15 +28,9 @@ public class EcoRobotImpl extends EcoRobot {
 
 			@Override
 			public void moveRobots() {
-				LOGGER.info("Move all robots");
-				List<Cell> neighbors = requires().gridProvider().getNeighbors(new Position(0, 0));
-				for(Cell cell : neighbors) {
-					System.out.println("IT WORKS");
-				}
-				
+				LOGGER.info("Move all robots");	
 				for (Robot.Component robot : robots) {
-					// IT SHOULD WORK...	
-					//	robot.robotActionHandler().move();
+					robot.robotActionHandler().move();
 				}
 			}
 
