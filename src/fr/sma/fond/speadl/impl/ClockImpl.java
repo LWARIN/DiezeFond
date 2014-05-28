@@ -1,15 +1,12 @@
 package fr.sma.fond.speadl.impl;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
-
 import Fond.Clock;
 
 public class ClockImpl extends Clock {
-	
-	private final static Logger LOGGER = Logger.getLogger(ClockImpl.class.getName());
 	
 	public ClockImpl() {
 		startScheduling();
@@ -21,7 +18,7 @@ public class ClockImpl extends Clock {
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				LOGGER.info("Clock tic : " + new Date(System.currentTimeMillis()));
+				requires().log().info("ClockImpl", "Tick at " + DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis())));
 				requires().ecoRobot().moveRobots();
 				requires().guiUpdater().refresh();
 			}

@@ -2,8 +2,6 @@ package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
 import fr.sma.core.Cell;
 import fr.sma.core.Position;
 import fr.sma.core.State;
@@ -16,7 +14,6 @@ import Fond.EcoRobot.Robot;
 
 public class RobotImpl extends Robot {
 
-	private final static Logger LOGGER = Logger.getLogger(RobotImpl.class.getName());
 	private String id;
 	private Position currentPosition;
 	private State goal;
@@ -97,7 +94,8 @@ public class RobotImpl extends Robot {
 						}
 
 						for (Cell cell : reachableCells) {
-							boolean result = (goal == State.DESTINATION && cell.getPosition().getX() > currentPosition.getX())
+							boolean result = (goal == State.DESTINATION && cell.getPosition().getX() > currentPosition
+									.getX())
 									|| (goal == State.EXPEDITION && cell.getPosition().getX() < currentPosition.getX());
 
 							if (defaultBehaviour == UP) {
@@ -143,7 +141,6 @@ public class RobotImpl extends Robot {
 
 					@Override
 					public void move() {
-						LOGGER.info("I SHALL MOVE " + id + " FROM POSITION : " + currentPosition + " - Goal : " + goal);
 
 						List<Cell> neighbors = eco_requires().gridProvider().getNeighbors(currentPosition);
 
@@ -151,15 +148,15 @@ public class RobotImpl extends Robot {
 								currentPosition);
 
 						if (nextPosition == null) {
-							LOGGER.warning(id + " : I cannot move : nothing do : " + currentPosition);
+							eco_requires().log().warning("RobotImpl #" + id, "Robot can not move " + currentPosition);
 						} else {
 							State state = eco_requires().gridProvider().getState(nextPosition.getX(),
 									nextPosition.getY());
 							if (state == goal) {
-								LOGGER.info(id + " : I have found my goal in : " + nextPosition);
+								eco_requires().log().info("RobotImpl #" + id, "Robot has reached its goal in : " + nextPosition);
 								switchGoalAndState();
 							} else {
-								LOGGER.info(id + " : Move on : " + nextPosition);
+								eco_requires().log().info("RobotImpl #" + id, "Robot has moved on : " + nextPosition);
 							}
 							eco_requires().gridProvider().setState(currentPosition.getX(), currentPosition.getY(),
 									State.FREESPACE);

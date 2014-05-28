@@ -4,6 +4,7 @@ import fr.sma.fond.speadl.GridManager;
 import Fond.App;
 import Fond.AppGUI;
 import Fond.Clock;
+import Fond.Logger;
 import Fond.Plant;
 
 public class AppImpl extends App {
@@ -23,4 +24,8 @@ public class AppImpl extends App {
 		return new ClockImpl();
 	}
 
+	@Override
+	protected Logger make_logger() {
+		return new LoggerImpl();
+	}
 }
