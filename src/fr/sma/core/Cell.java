@@ -25,4 +25,8 @@ public class Cell {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+
+	public String toString() {
+		return "Cell: {State: " + state + ", " + position + "}";
+	}
 }

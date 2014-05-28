@@ -29,7 +29,7 @@ public class PlantImpl extends Plant {
 
 			@Override
 			public void setReceptionArea(int x, int y, int width, int height) {
-				parts().grid().gridManager().setExpeditionArea(x, y, width, height);
+				parts().grid().gridManager().setReceptionArea(x, y, width, height);
 			}
 
 			@Override

@@ -10,8 +10,8 @@ public class Main {
 		Plant.Component plant = (new PlantImpl()).newComponent();
 		plant.initManager().setObstacle(25, 35);
 		plant.initManager().setExpeditionArea(0, 10, 10, 30);
-		plant.initManager().setReceptionArea(70, 10, 10, 30);
+		plant.initManager().setReceptionArea(90, 10, 10, 30);
 		plant.initManager().addCorridor(0);
-		plant.initManager().addCorridor(49);
+		plant.initManager().addCorridor(48);
 	}
 }

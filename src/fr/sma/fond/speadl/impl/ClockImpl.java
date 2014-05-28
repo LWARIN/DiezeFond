@@ -24,6 +24,6 @@ public class ClockImpl extends Clock {
 				LOGGER.info("Clock tic : " + new Date(System.currentTimeMillis()));
 				requires().ecoRobot().moveRobots();
 			}
-		}, 3000, 3000);
+		}, 1000, 1000);
 	}
 }

@@ -17,8 +17,8 @@ public class EcoRobotImpl extends EcoRobot {
 	@Override
 	protected void start() {
 		robots = new ArrayList<Robot.Component>();
-		for (int i = 0; i < 10; i++) {
-			robots.add(newRobot("#id" + i, new Position(0, 0)));
+		for (int i = 0; i < 1; i++) {
+			robots.add(newRobot("#id" + i, new Position(95, 0)));
 		}
 	}
 
