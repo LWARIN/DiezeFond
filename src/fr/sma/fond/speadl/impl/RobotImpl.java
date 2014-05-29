@@ -112,6 +112,7 @@ public class RobotImpl extends Robot {
 						// Default behaviour
 						for (Cell cell : reachableCells) {
 							if (defaultBehaviour == UP) {
+
 								if (cell.getPosition().getY() < currentPosition.getY()) {
 									return cell.getPosition();
 								}
@@ -153,7 +154,8 @@ public class RobotImpl extends Robot {
 							State state = eco_requires().gridProvider().getState(nextPosition.getX(),
 									nextPosition.getY());
 							if (state == goal) {
-								eco_requires().log().info("RobotImpl #" + id, "Robot has reached its goal in : " + nextPosition);
+								eco_requires().log().info("RobotImpl #" + id,
+										"Robot has reached its goal in : " + nextPosition);
 								switchGoalAndState();
 							} else {
 								eco_requires().log().info("RobotImpl #" + id, "Robot has moved on : " + nextPosition);

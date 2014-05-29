@@ -105,10 +105,10 @@ public class GridImpl extends Grid {
 				int y = current.getY();
 
 				int xMin = (x - 3) <= 0 ? 0 : (x - 3);
-				int xMax = (x + 3) >= GridManager.GRID_WIDTH - 1 ? GridManager.GRID_WIDTH - 1 : (x + 3);
+				int xMax = (x + 3) > GridManager.GRID_WIDTH ? GridManager.GRID_WIDTH : (x + 3);
 
 				int yMin = (y - 3) <= 0 ? 0 : (y - 3);
-				int yMax = (y + 3) > GridManager.GRID_HEIGHT - 1 ? GridManager.GRID_HEIGHT - 1 : (y + 3);
+				int yMax = (y + 3) > GridManager.GRID_HEIGHT ? GridManager.GRID_HEIGHT : (y + 3);
 
 				List<Cell> neighbors = new ArrayList<Cell>();
 				for (int i = xMin; i < xMax; i++) {

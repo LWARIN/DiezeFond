@@ -22,6 +22,6 @@ public class ClockImpl extends Clock {
 				requires().ecoRobot().moveRobots();
 				requires().guiUpdater().refresh();
 			}
-		}, 1000, 1000);
+		}, 20, 20);
 	}
 }
