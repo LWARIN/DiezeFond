@@ -1,7 +1,9 @@
 package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
 import fr.sma.core.Cell;
 import fr.sma.core.Position;
 import fr.sma.core.State;
@@ -119,6 +121,8 @@ public class GridImpl extends Grid {
 					}
 				}
 
+				Collections.shuffle(neighbors);
+				
 				return neighbors;
 			}
 
