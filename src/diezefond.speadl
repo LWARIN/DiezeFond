@@ -5,6 +5,7 @@ import fr.sma.fond.speadl.GridManager
 import fr.sma.fond.speadl.InitManager
 import fr.sma.fond.speadl.MemoryManager
 import fr.sma.fond.speadl.GridProvider
+import fr.sma.fond.speadl.IGuiUpdate
 
 namespace Fond {
 	
@@ -16,6 +17,16 @@ namespace Fond {
 		provides actionManager : ActionManager
 		requires memoryManager : MemoryManager
 	} 
+	
+	component Grid {
+		provides gridManager : GridManager
+		provides gridProvider : GridProvider
+	} 
+	
+	component Clock {
+		requires ecoRobot : EcoRobotManager
+		requires guiUpdater : IGuiUpdate
+	}
 	
 	ecosystem EcoRobot {
 		requires gridProvider : GridProvider
@@ -32,39 +43,35 @@ namespace Fond {
 		}
 	}
 	
-	component Grid {
-		provides gridManager : GridManager
-		provides gridProvider : GridProvider
-	} 
-	
-	component Clock {
-		requires ecoRobot : EcoRobotManager
-	}
-	
 	component Plant {
 		provides initManager : InitManager
+		provides ecoRobotManager : EcoRobotManager = robots.ecoRobotManager
+		provides gridProvider : GridProvider = grid.gridProvider
 		
 		part grid : Grid
 		
 		part robots : EcoRobot {
 			bind gridProvider to grid.gridProvider
-		}
-		
-		part clock : Clock{
-			bind ecoRobot to robots.ecoRobotManager
-		}
+		}		
 	}
 	
 	component AppGUI {
-		
+		provides guiUpdater : IGuiUpdate	
+		requires gridProvider : GridProvider	
 	}
 	
-	component PlantGUI {
+	component App {
+		provides initManager : InitManager = plant.initManager
 		
-	}
-	
-	component GUI {
-		part appGui : AppGUI
-		part plantGUI : PlantGUI
+		part plant : Plant
+		
+		part gui : AppGUI {
+			bind gridProvider to plant.gridProvider
+		}
+		
+		part clock : Clock {
+			bind ecoRobot to plant.ecoRobotManager
+			bind guiUpdater to gui.guiUpdater
+		}
 	}
 }

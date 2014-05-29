@@ -1,10 +1,9 @@
 package fr.sma.fond.speadl.impl;
 
-import fr.sma.fond.speadl.InitManager;
-import Fond.Clock;
 import Fond.EcoRobot;
 import Fond.Grid;
 import Fond.Plant;
+import fr.sma.fond.speadl.InitManager;
 
 public class PlantImpl extends Plant {
 
@@ -47,11 +46,6 @@ public class PlantImpl extends Plant {
 	@Override
 	protected EcoRobot make_robots() {
 		return new EcoRobotImpl();
-	}
-
-	@Override
-	protected Clock make_clock() {
-		return new ClockImpl();
 	}
 
 }

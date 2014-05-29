@@ -23,6 +23,7 @@ public class ClockImpl extends Clock {
 			public void run() {
 				LOGGER.info("Clock tic : " + new Date(System.currentTimeMillis()));
 				requires().ecoRobot().moveRobots();
+				requires().guiUpdater().refresh();
 			}
 		}, 1000, 1000);
 	}

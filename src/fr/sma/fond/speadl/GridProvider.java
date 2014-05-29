@@ -12,6 +12,8 @@ public interface GridProvider {
 	
 	public void setState(int x, int y, State state);
 	
+	public List<Cell> getGridContent();
+	
 	public List<Cell> getNeighbors(Position current);
 }
 

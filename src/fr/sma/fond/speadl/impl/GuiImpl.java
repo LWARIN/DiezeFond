@@ -1,14 +1,25 @@
 package fr.sma.fond.speadl.impl;
 
-import Fond.AppGUI;
-import Fond.GUI;
-import Fond.PlantGUI;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class GuiImpl extends GUI {
+public class GuiImpl {
+	
+	private JFrame window;
+	private JPanel container;
+	
+	public GuiImpl() {
+		window = new JFrame();
+		window.setResizable(false);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setContentPane(container);
+		container = new JPanel();
+	}
 
-	@Override
-	protected AppGUI make_appGui() {
-		return new AppGUI() {
+	//@Override
+	//protected AppGUI make_appGui() {
+		//return new AppGUI() {
+			
 			/*
 			 * private JFrame window; private JPanel container;
 			 * 
@@ -27,12 +38,12 @@ public class GuiImpl extends GUI {
 			 * container.add(content); window.pack();
 			 * window.setLocationRelativeTo(null); } }; }
 			 */
-		};
-	}
+		//};
+	//}
 
-	@Override
-	protected PlantGUI make_plantGUI() {
-		return new PlantGUI() {
+	//@Override
+	//protected PlantGUI make_plantGUI() {
+		//return new PlantGUI() {
 			/*
 			 * private GridGui gridGui;
 			 * 
@@ -50,7 +61,7 @@ public class GuiImpl extends GUI {
 			 * gridGui.repaint();
 			 * requires().guiLink().setEnvironmentGui(gridGui); } }; }
 			 */
-		};
-	}
+		//};
+	//}
 
 }
