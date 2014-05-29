@@ -55,7 +55,7 @@ namespace Fond {
 		}		
 	}
 	
-	component AppGUI {
+	component Gui {
 		provides guiUpdater : IGuiUpdate	
 		requires gridProvider : GridProvider	
 	}
@@ -65,7 +65,7 @@ namespace Fond {
 		
 		part plant : Plant
 		
-		part gui : AppGUI {
+		part gui : Gui {
 			bind gridProvider to plant.gridProvider
 		}
 		

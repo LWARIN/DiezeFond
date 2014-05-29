@@ -40,7 +40,6 @@ public class GridImpl extends Grid {
 				for (int i = x; i < x + width; i++) {
 					for (int j = y; j < y + height; j++) {
 						grid[i][j].setState(State.EXPEDITION);
-						grid[i][j].setUpdated(true);
 					}
 				}
 			}
@@ -52,7 +51,6 @@ public class GridImpl extends Grid {
 				for (int i = x; i < x + width; i++) {
 					for (int j = y; j < y + height; j++) {
 						grid[i][j].setState(State.DESTINATION);
-						grid[i][j].setUpdated(true);
 					}
 				}
 			}
@@ -63,7 +61,6 @@ public class GridImpl extends Grid {
 				for (int i = x; i < x + width; i++) {
 					for (int j = 0; j < GridManager.GRID_HEIGHT; j++) {
 						grid[i][j].setState(State.OBSTACLE);
-						grid[i][j].setUpdated(true);
 					}
 				}
 				obstacleX = x;
@@ -76,7 +73,6 @@ public class GridImpl extends Grid {
 				for (int i = 0; i < GridManager.GRID_WIDTH; i++) {
 					if (grid[i][y].getState() == State.OBSTACLE) {
 						grid[i][y].setState(State.FREESPACE);
-						grid[i][y].setUpdated(true);
 					}
 				}
 			}
@@ -87,7 +83,6 @@ public class GridImpl extends Grid {
 				for (int i = obstacleX; i < obstacleX + obstacleWidth; i++) {
 					if (grid[i][y].getState() == State.OBSTACLE) {
 						grid[i][y].setState(State.FREESPACE);
-						grid[i][y].setUpdated(true);
 					}
 				}
 			}

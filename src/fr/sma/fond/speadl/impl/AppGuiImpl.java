@@ -8,14 +8,15 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Fond.Gui;
+
 import com.sun.istack.internal.logging.Logger;
 
 import fr.sma.core.Cell;
 import fr.sma.core.GridGui;
 import fr.sma.fond.speadl.IGuiUpdate;
-import Fond.AppGUI;
 
-public class AppGuiImpl extends AppGUI {
+public class AppGuiImpl extends Gui {
 	
 	private final static Logger LOGGER = Logger.getLogger(AppGuiImpl.class);
 	
