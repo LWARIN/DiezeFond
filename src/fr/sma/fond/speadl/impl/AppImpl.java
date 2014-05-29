@@ -2,7 +2,11 @@ package fr.sma.fond.speadl.impl;
 
 import Fond.App;
 import Fond.Clock;
+
+import Fond.Logger;
+
 import Fond.Gui;
+
 import Fond.Plant;
 import fr.sma.fond.speadl.GridManager;
 
@@ -23,4 +27,8 @@ public class AppImpl extends App {
 		return new ClockImpl();
 	}
 
+	@Override
+	protected Logger make_logger() {
+		return new LoggerImpl();
+	}
 }

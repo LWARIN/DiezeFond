@@ -2,9 +2,6 @@ package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import fr.sma.core.Cell;
 import fr.sma.core.Position;
 import fr.sma.core.State;
@@ -13,8 +10,6 @@ import fr.sma.fond.speadl.GridProvider;
 import Fond.Grid;
 
 public class GridImpl extends Grid {
-
-	private final static Logger LOGGER = Logger.getLogger(GridImpl.class.getName());
 
 	private Cell[][] grid;
 	private int obstacleX;
@@ -35,8 +30,8 @@ public class GridImpl extends Grid {
 
 			@Override
 			public void setExpeditionArea(int x, int y, int width, int height) {
-				LOGGER.log(Level.INFO, "Creating expedition area: (" + x + ", " + y + "); width: " + width
-						+ "; height: " + height);
+				requires().log().info("GridImpl",
+						"Creating expedition area: (" + x + ", " + y + "); width: " + width + "; height: " + height);
 				for (int i = x; i < x + width; i++) {
 					for (int j = y; j < y + height; j++) {
 						grid[i][j].setState(State.EXPEDITION);
@@ -46,8 +41,8 @@ public class GridImpl extends Grid {
 
 			@Override
 			public void setReceptionArea(int x, int y, int width, int height) {
-				LOGGER.log(Level.INFO, "Creating reception area: (" + x + ", " + y + "); width: " + width
-						+ "; height: " + height);
+				requires().log().info("GridImpl",
+						"Creating reception area: (" + x + ", " + y + "); width: " + width + "; height: " + height);
 				for (int i = x; i < x + width; i++) {
 					for (int j = y; j < y + height; j++) {
 						grid[i][j].setState(State.DESTINATION);
@@ -57,7 +52,7 @@ public class GridImpl extends Grid {
 
 			@Override
 			public void setObstacle(int x, int width) {
-				LOGGER.log(Level.INFO, "Creating obstacle on column: " + x + "; width: " + width);
+				requires().log().info("GridImpl", "Creating obstacle on column: " + x + "; width: " + width);
 				for (int i = x; i < x + width; i++) {
 					for (int j = 0; j < GridManager.GRID_HEIGHT; j++) {
 						grid[i][j].setState(State.OBSTACLE);
@@ -69,7 +64,7 @@ public class GridImpl extends Grid {
 
 			@Override
 			public void addCorridor(int y) {
-				LOGGER.log(Level.INFO, "Creating corridor on line: " + y);
+				requires().log().info("GridImpl", "Creating corridor on line: " + y);
 				for (int i = 0; i < GridManager.GRID_WIDTH; i++) {
 					if (grid[i][y].getState() == State.OBSTACLE) {
 						grid[i][y].setState(State.FREESPACE);
@@ -79,7 +74,7 @@ public class GridImpl extends Grid {
 
 			@Override
 			public void removeCorridor(int y) {
-				LOGGER.log(Level.INFO, "Removing corridor on line: " + y);
+				requires().log().info("GridImpl", "Removing corridor on line: " + y);
 				for (int i = obstacleX; i < obstacleX + obstacleWidth; i++) {
 					if (grid[i][y].getState() == State.OBSTACLE) {
 						grid[i][y].setState(State.FREESPACE);

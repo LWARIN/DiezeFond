@@ -2,15 +2,11 @@ package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
 import fr.sma.core.Position;
 import fr.sma.fond.speadl.EcoRobotManager;
 import Fond.EcoRobot;
 
 public class EcoRobotImpl extends EcoRobot {
-
-	private final static Logger LOGGER = Logger.getLogger(EcoRobotImpl.class.getName());
 
 	private List<Robot.Component> robots;
 
@@ -18,7 +14,7 @@ public class EcoRobotImpl extends EcoRobot {
 	protected void start() {
 		robots = new ArrayList<Robot.Component>();
 		for (int i = 0; i < 1; i++) {
-			robots.add(newRobot("#id" + i, new Position(95, 0)));
+			robots.add(newRobot("#id" + i, new Position(0, 0)));
 		}
 	}
 
@@ -28,10 +24,11 @@ public class EcoRobotImpl extends EcoRobot {
 
 			@Override
 			public void moveRobots() {
-				LOGGER.info("Move all robots");	
+				requires().log().info("EcoRobotImpl", "##### START MOVING ROBOTS #####");
 				for (Robot.Component robot : robots) {
 					robot.robotActionHandler().move();
 				}
+				requires().log().info("EcoRobotImpl", "##### END MOVING ROBOTS #####");
 			}
 
 		};

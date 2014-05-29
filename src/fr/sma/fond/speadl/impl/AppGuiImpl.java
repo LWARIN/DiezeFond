@@ -10,15 +10,11 @@ import javax.swing.JPanel;
 
 import Fond.Gui;
 
-import com.sun.istack.internal.logging.Logger;
-
 import fr.sma.core.Cell;
 import fr.sma.core.GridGui;
 import fr.sma.fond.speadl.IGuiUpdate;
-
+		
 public class AppGuiImpl extends Gui {
-	
-	private final static Logger LOGGER = Logger.getLogger(AppGuiImpl.class);
 	
 	private JFrame window;
 	private JPanel container;
@@ -48,7 +44,6 @@ public class AppGuiImpl extends Gui {
 
 			@Override
 			public void refresh() {
-				LOGGER.info("Updating the graphical grid.");
 				List<Cell> cellList = requires().gridProvider().getGridContent();
 				gridGui.updateGrid(cellList);
 			}

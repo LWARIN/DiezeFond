@@ -6,6 +6,7 @@ import fr.sma.fond.speadl.InitManager
 import fr.sma.fond.speadl.MemoryManager
 import fr.sma.fond.speadl.GridProvider
 import fr.sma.fond.speadl.IGuiUpdate
+import fr.sma.fond.speadl.Log
 
 namespace Fond {
 	
@@ -21,16 +22,19 @@ namespace Fond {
 	component Grid {
 		provides gridManager : GridManager
 		provides gridProvider : GridProvider
+		requires log : Log
 	} 
 	
 	component Clock {
 		requires ecoRobot : EcoRobotManager
 		requires guiUpdater : IGuiUpdate
+		requires log : Log
 	}
 	
 	ecosystem EcoRobot {
 		requires gridProvider : GridProvider
 		provides ecoRobotManager : EcoRobotManager
+		requires log : Log
 		
 		species Robot (id : String, position : Position) {
 			part memory: RobotMemory
@@ -47,11 +51,15 @@ namespace Fond {
 		provides initManager : InitManager
 		provides ecoRobotManager : EcoRobotManager = robots.ecoRobotManager
 		provides gridProvider : GridProvider = grid.gridProvider
+		requires log : Log
 		
-		part grid : Grid
+		part grid : Grid {
+			bind log to log
+		}
 		
 		part robots : EcoRobot {
 			bind gridProvider to grid.gridProvider
+			bind log to log
 		}		
 	}
 	
@@ -60,10 +68,19 @@ namespace Fond {
 		requires gridProvider : GridProvider	
 	}
 	
+	component Logger {
+		provides log: Log
+	}
+	
 	component App {
 		provides initManager : InitManager = plant.initManager
+		provides log : Log = logger.log
 		
-		part plant : Plant
+		part logger : Logger
+				
+		part plant : Plant {
+			bind log to log
+		}
 		
 		part gui : Gui {
 			bind gridProvider to plant.gridProvider
@@ -72,6 +89,7 @@ namespace Fond {
 		part clock : Clock {
 			bind ecoRobot to plant.ecoRobotManager
 			bind guiUpdater to gui.guiUpdater
+			bind log to log
 		}
 	}
 }
