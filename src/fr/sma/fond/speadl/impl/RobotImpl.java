@@ -2,9 +2,10 @@ package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import fr.sma.core.Cell;
-import fr.sma.core.Position;
-import fr.sma.core.State;
+
+import fr.sma.fond.core.Cell;
+import fr.sma.fond.core.Position;
+import fr.sma.fond.core.State;
 import fr.sma.fond.speadl.ActionManager;
 import fr.sma.fond.speadl.GridManager;
 import fr.sma.fond.speadl.MemoryManager;

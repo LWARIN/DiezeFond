@@ -1,4 +1,4 @@
-package fr.sma.core;
+package fr.sma.fond.core;
 
 public class Cell {
 

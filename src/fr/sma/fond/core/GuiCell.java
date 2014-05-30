@@ -1,4 +1,4 @@
-package fr.sma.core;
+package fr.sma.fond.core;
 
 import java.awt.Color;
 import java.awt.Dimension;

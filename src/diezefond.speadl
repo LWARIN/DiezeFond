@@ -1,4 +1,4 @@
-import fr.sma.core.Position
+import fr.sma.fond.core.Position
 import fr.sma.fond.speadl.ActionManager
 import fr.sma.fond.speadl.EcoRobotManager
 import fr.sma.fond.speadl.GridManager

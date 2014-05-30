@@ -9,9 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Fond.Gui;
-
-import fr.sma.core.Cell;
-import fr.sma.core.GridGui;
+import fr.sma.fond.core.Cell;
+import fr.sma.fond.core.GridGui;
 import fr.sma.fond.speadl.IGuiUpdate;
 		
 public class AppGuiImpl extends Gui {

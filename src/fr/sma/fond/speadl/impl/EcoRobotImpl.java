@@ -2,7 +2,8 @@ package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import fr.sma.core.Position;
+
+import fr.sma.fond.core.Position;
 import fr.sma.fond.speadl.EcoRobotManager;
 import Fond.EcoRobot;
 
@@ -13,7 +14,7 @@ public class EcoRobotImpl extends EcoRobot {
 	@Override
 	protected void start() {
 		robots = new ArrayList<Robot.Component>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 50; i++) {
 			robots.add(newRobot("#id" + i, new Position(0, 0)));
 		}
 	}
