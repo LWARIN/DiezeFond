@@ -1,12 +1,16 @@
 package fr.sma.fond.speadl.impl;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 import Fond.Gui;
 import fr.sma.fond.core.Cell;
@@ -20,6 +24,8 @@ public class AppGuiImpl extends Gui {
 	private JFrame window;
 	private JPanel container;
 	
+	private JTextArea logArea;
+	
 	private GridGui gridGui;
 	
 	public AppGuiImpl(int width, int height) {
@@ -27,9 +33,8 @@ public class AppGuiImpl extends Gui {
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		container = new JPanel();
+		container = new JPanel(new BorderLayout(0, 10));
 		gridGui = new GridGui(width, height);		
-		container.add(gridGui, BorderLayout.CENTER);
 		
 		initComponents();
 		
@@ -66,7 +71,16 @@ public class AppGuiImpl extends Gui {
 		menuPanel.add(testButton4);
 		menuPanel.add(testButton5);
 		
+		logArea = new JTextArea();
+		((DefaultCaret) logArea.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		logArea.setEditable(false);
+		JScrollPane logPanel = new JScrollPane(logArea);
+		logPanel.setPreferredSize(new Dimension(0, 100));
+		
+		
+		container.add(gridGui, BorderLayout.CENTER);
 		container.add(menuPanel, BorderLayout.EAST);
+		container.add(logPanel, BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -90,17 +104,17 @@ public class AppGuiImpl extends Gui {
 
 			@Override
 			public void logInfo(String message) {
-				System.out.println("INFO: " + message);
+				logArea.append("\n" + "INFO: " + message);
 			}
 
 			@Override
 			public void logWarning(String message) {
-				System.out.println("INFO: " + message);
+				logArea.append("\n" + "WARNING: " + message);
 			}
 
 			@Override
 			public void logError(String message) {
-				System.out.println("INFO: " + message);
+				logArea.append("\n" + "ERROR: " + message);
 			}			
 		};
 	}
