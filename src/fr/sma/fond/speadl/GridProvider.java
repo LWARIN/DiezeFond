@@ -8,6 +8,8 @@ import fr.sma.fond.core.State;
 
 public interface GridProvider {
 	
+	public Position getRandomFreeCell();
+	
 	public State getState(int x, int y);
 	
 	public void setState(int x, int y, State state);

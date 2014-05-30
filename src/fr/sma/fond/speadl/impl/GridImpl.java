@@ -3,6 +3,7 @@ package fr.sma.fond.speadl.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import fr.sma.fond.core.Cell;
 import fr.sma.fond.core.Position;
@@ -14,16 +15,43 @@ import Fond.Grid;
 public class GridImpl extends Grid {
 
 	private Cell[][] grid;
-	private int obstacleX;
-	private int obstacleWidth;
 
-	public GridImpl() {
+	@Override
+	protected void start() {
+		super.start();
+
 		grid = new Cell[GridManager.GRID_WIDTH][GridManager.GRID_HEIGHT];
 		for (int i = 0; i < GridManager.GRID_WIDTH; ++i) {
 			for (int j = 0; j < GridManager.GRID_HEIGHT; ++j) {
 				grid[i][j] = new Cell(new Position(i, j));
 			}
 		}
+
+		requires().log().info("GridImpl", "Creating expedition area");
+		for (int i = 0; i < 5; i++) {
+			for (int j = 20; j < 20 + 10; j++) {
+				grid[i][j].setState(State.EXPEDITION);
+			}
+		}
+
+		requires().log().info("GridImpl", "Creating reception area");
+		for (int i = 95; i < GridManager.GRID_WIDTH; i++) {
+			for (int j = 20; j < 20 + 10; j++) {
+				grid[i][j].setState(State.DESTINATION);
+			}
+		}
+
+		requires().log().info("GridImpl", "Creating obstacle");
+		for (int i = 35; i < 35 + 30; i++) {
+			for (int j = 0; j < GridManager.GRID_HEIGHT; j++) {
+				grid[i][j].setState(State.OBSTACLE);
+			}
+		}
+
+	}
+
+	public GridImpl() {
+
 	}
 
 	@Override
@@ -31,43 +59,9 @@ public class GridImpl extends Grid {
 		return new GridManager() {
 
 			@Override
-			public void setExpeditionArea(int x, int y, int width, int height) {
-				requires().log().info("GridImpl",
-						"Creating expedition area: (" + x + ", " + y + "); width: " + width + "; height: " + height);
-				for (int i = x; i < x + width; i++) {
-					for (int j = y; j < y + height; j++) {
-						grid[i][j].setState(State.EXPEDITION);
-					}
-				}
-			}
-
-			@Override
-			public void setReceptionArea(int x, int y, int width, int height) {
-				requires().log().info("GridImpl",
-						"Creating reception area: (" + x + ", " + y + "); width: " + width + "; height: " + height);
-				for (int i = x; i < x + width; i++) {
-					for (int j = y; j < y + height; j++) {
-						grid[i][j].setState(State.DESTINATION);
-					}
-				}
-			}
-
-			@Override
-			public void setObstacle(int x, int width) {
-				requires().log().info("GridImpl", "Creating obstacle on column: " + x + "; width: " + width);
-				for (int i = x; i < x + width; i++) {
-					for (int j = 0; j < GridManager.GRID_HEIGHT; j++) {
-						grid[i][j].setState(State.OBSTACLE);
-					}
-				}
-				obstacleX = x;
-				obstacleWidth = width;
-			}
-
-			@Override
 			public void addCorridor(int y) {
 				requires().log().info("GridImpl", "Creating corridor on line: " + y);
-				for (int i = 0; i < GridManager.GRID_WIDTH; i++) {
+				for (int i = 35; i < 35 + 30; i++) {
 					if (grid[i][y].getState() == State.OBSTACLE) {
 						grid[i][y].setState(State.FREESPACE);
 					}
@@ -77,9 +71,9 @@ public class GridImpl extends Grid {
 			@Override
 			public void removeCorridor(int y) {
 				requires().log().info("GridImpl", "Removing corridor on line: " + y);
-				for (int i = obstacleX; i < obstacleX + obstacleWidth; i++) {
-					if (grid[i][y].getState() == State.OBSTACLE) {
-						grid[i][y].setState(State.FREESPACE);
+				for (int i = 35; i < 35 + 30; i++) {
+					if (grid[i][y].getState() == State.FREESPACE) {
+						grid[i][y].setState(State.OBSTACLE);
 					}
 				}
 			}
@@ -122,7 +116,7 @@ public class GridImpl extends Grid {
 				}
 
 				Collections.shuffle(neighbors);
-				
+
 				return neighbors;
 			}
 
@@ -137,7 +131,20 @@ public class GridImpl extends Grid {
 				return cellList;
 			}
 
+			@Override
+			public Position getRandomFreeCell() {
+				Random rand = new Random();
+				int x = 0, y = 0;
+				State state = null;
+				while (state != State.FREESPACE) {
+					x = rand.nextInt(GridManager.GRID_WIDTH);
+					y = rand.nextInt(GridManager.GRID_HEIGHT);
+					state = grid[x][y].getState();
+				}
+
+				return grid[x][y].getPosition();
+			}
+
 		};
 	}
-
 }

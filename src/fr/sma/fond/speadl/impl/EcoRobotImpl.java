@@ -17,7 +17,8 @@ public class EcoRobotImpl extends EcoRobot {
 	protected void start() {
 		robots = new ArrayList<Robot.Component>();
 		for (int i = 0; i < 50; i++) {
-			robots.add(newRobot("#id" + i, new Position(0, 0)));
+			Position startPosition = requires().gridProvider().getRandomFreeCell();
+			robots.add(newRobot("#id" + i, startPosition));
 		}
 
 		idsToRemove = new ArrayList<String>();

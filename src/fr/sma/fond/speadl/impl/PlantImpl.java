@@ -17,24 +17,10 @@ public class PlantImpl extends Plant {
 			}
 
 			@Override
-			public void setObstacle(int x, int width) {
-				parts().grid().gridManager().setObstacle(x, width);
-			}
-
-			@Override
-			public void setExpeditionArea(int x, int y, int width, int height) {
-				parts().grid().gridManager().setExpeditionArea(x, y, width, height);
-			}
-
-			@Override
-			public void setReceptionArea(int x, int y, int width, int height) {
-				parts().grid().gridManager().setReceptionArea(x, y, width, height);
-			}
-
-			@Override
 			public void addCorridor(int y) {
 				parts().grid().gridManager().addCorridor(y);
 			}
+			
 		};
 	}
 
