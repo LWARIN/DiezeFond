@@ -7,6 +7,7 @@ import fr.sma.fond.speadl.MemoryManager
 import fr.sma.fond.speadl.GridProvider
 import fr.sma.fond.speadl.IGuiUpdate
 import fr.sma.fond.speadl.Log
+import fr.sma.fond.speadl.IGuiLogger
 
 namespace Fond {
 	
@@ -15,14 +16,16 @@ namespace Fond {
 	}
 	
 	component  RobotActionManager {
-		provides actionManager : ActionManager
 		requires memoryManager : MemoryManager
+		
+		provides actionManager : ActionManager
 	} 
 	
 	component Grid {
+		requires log : Log
+		
 		provides gridManager : GridManager
 		provides gridProvider : GridProvider
-		requires log : Log
 	} 
 	
 	component Clock {
@@ -48,10 +51,11 @@ namespace Fond {
 	}
 	
 	component Plant {
+		requires log : Log
+		
 		provides initManager : InitManager
 		provides ecoRobotManager : EcoRobotManager = robots.ecoRobotManager
 		provides gridProvider : GridProvider = grid.gridProvider
-		requires log : Log
 		
 		part grid : Grid {
 			bind log to log
@@ -64,17 +68,20 @@ namespace Fond {
 	}
 	
 	component Gui {
+		requires gridProvider : GridProvider
+		
 		provides guiUpdater : IGuiUpdate	
-		requires gridProvider : GridProvider	
+		provides guiLogger : IGuiLogger	
 	}
 	
 	component Logger {
-		provides log: Log
+		provides log : Log
 	}
 	
 	component App {
 		provides initManager : InitManager = plant.initManager
 		provides log : Log = logger.log
+		provides guiLog : IGuiLogger = gui.guiLogger
 		
 		part logger : Logger
 				

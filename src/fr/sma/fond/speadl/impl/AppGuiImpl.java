@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import Fond.Gui;
 import fr.sma.fond.core.Cell;
 import fr.sma.fond.core.GridGui;
+import fr.sma.fond.core.Level;
+import fr.sma.fond.speadl.IGuiLogger;
 import fr.sma.fond.speadl.IGuiUpdate;
 		
 public class AppGuiImpl extends Gui {
@@ -65,5 +67,41 @@ public class AppGuiImpl extends Gui {
 		menuPanel.add(testButton5);
 		
 		container.add(menuPanel, BorderLayout.EAST);
+	}
+
+	@Override
+	protected IGuiLogger make_guiLogger() {
+		return new IGuiLogger() {
+
+			@Override
+			public void update(Level level, String message) {
+				switch (level) {
+				case INFO:
+					logInfo(message);
+					break;
+				case WARNING:
+					logWarning(message);
+					break;
+				case ERROR:
+					logError(message);
+					break;
+				}
+			}
+
+			@Override
+			public void logInfo(String message) {
+				System.out.println("INFO: " + message);
+			}
+
+			@Override
+			public void logWarning(String message) {
+				System.out.println("INFO: " + message);
+			}
+
+			@Override
+			public void logError(String message) {
+				System.out.println("INFO: " + message);
+			}			
+		};
 	}
 }
