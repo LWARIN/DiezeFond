@@ -17,6 +17,7 @@ public class RobotImpl extends Robot {
 
 	private String id;
 	private Position currentPosition;
+	private State oldGridState;
 	private State goal;
 	private State robotState;
 
@@ -24,7 +25,13 @@ public class RobotImpl extends Robot {
 		this.id = id;
 		currentPosition = position;
 		robotState = State.EMPTYROBOT;
+		oldGridState = State.FREESPACE;
 		switchGoalAndState();
+	}
+
+	public boolean equals(Object o) {
+		System.out.println("EQUALS : " + ((RobotImpl) o).id == id);
+		return ((RobotImpl) o).id == id;
 	}
 
 	private void switchGoalAndState() {
@@ -40,6 +47,8 @@ public class RobotImpl extends Robot {
 	@Override
 	protected RobotMemory make_memory() {
 		return new RobotMemory() {
+
+			private int nbInactive = 0;
 
 			@Override
 			protected MemoryManager make_memoryManager() {
@@ -83,6 +92,10 @@ public class RobotImpl extends Robot {
 						}
 
 						if (reachableCells.size() == 0) {
+							nbInactive++;
+							if (nbInactive > 3) {
+								eco_provides().ecoRobotManager().killRobot(id);
+							}
 							return null;
 						}
 
@@ -95,8 +108,7 @@ public class RobotImpl extends Robot {
 						}
 
 						for (Cell cell : reachableCells) {
-							boolean result = (goal == State.DESTINATION && cell.getPosition().getX() > currentPosition
-									.getX())
+							boolean result = (goal == State.DESTINATION && cell.getPosition().getX() > currentPosition.getX())
 									|| (goal == State.EXPEDITION && cell.getPosition().getX() < currentPosition.getX());
 
 							if (defaultBehaviour == UP) {
@@ -146,28 +158,29 @@ public class RobotImpl extends Robot {
 
 						List<Cell> neighbors = eco_requires().gridProvider().getNeighbors(currentPosition);
 
-						Position nextPosition = requires().memoryManager().getNextPosition(neighbors, goal,
-								currentPosition);
+						Position nextPosition = requires().memoryManager().getNextPosition(neighbors, goal, currentPosition);
 
 						if (nextPosition == null) {
 							eco_requires().log().warning("RobotImpl #" + id, "Robot can not move " + currentPosition);
 						} else {
-							State state = eco_requires().gridProvider().getState(nextPosition.getX(),
-									nextPosition.getY());
+							State state = eco_requires().gridProvider().getState(nextPosition.getX(), nextPosition.getY());
 							if (state == goal) {
-								eco_requires().log().info("RobotImpl #" + id,
-										"Robot has reached its goal in : " + nextPosition);
+								eco_requires().log().info("RobotImpl #" + id, "Robot has reached its goal in : " + nextPosition);
 								switchGoalAndState();
 							} else {
 								eco_requires().log().info("RobotImpl #" + id, "Robot has moved on : " + nextPosition);
 							}
-							eco_requires().gridProvider().setState(currentPosition.getX(), currentPosition.getY(),
-									State.FREESPACE);
-							eco_requires().gridProvider()
-									.setState(nextPosition.getX(), nextPosition.getY(), robotState);
+							eco_requires().gridProvider().setState(currentPosition.getX(), currentPosition.getY(), oldGridState);
+							oldGridState = eco_requires().gridProvider().getState(nextPosition.getX(), nextPosition.getY());
+							eco_requires().gridProvider().setState(nextPosition.getX(), nextPosition.getY(), robotState);
 							currentPosition = nextPosition;
 						}
 
+					}
+
+					@Override
+					public String getId() {
+						return id;
 					}
 				};
 			}

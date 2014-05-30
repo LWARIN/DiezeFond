@@ -1,6 +1,7 @@
 package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import fr.sma.fond.core.Position;
@@ -10,6 +11,7 @@ import Fond.EcoRobot;
 public class EcoRobotImpl extends EcoRobot {
 
 	private List<Robot.Component> robots;
+	private List<String> idsToRemove;
 
 	@Override
 	protected void start() {
@@ -17,6 +19,8 @@ public class EcoRobotImpl extends EcoRobot {
 		for (int i = 0; i < 50; i++) {
 			robots.add(newRobot("#id" + i, new Position(0, 0)));
 		}
+
+		idsToRemove = new ArrayList<String>();
 	}
 
 	@Override
@@ -26,10 +30,28 @@ public class EcoRobotImpl extends EcoRobot {
 			@Override
 			public void moveRobots() {
 				requires().log().info("EcoRobotImpl", "##### START MOVING ROBOTS #####");
-				for (Robot.Component robot : robots) {
-					robot.robotActionHandler().move();
+
+				Iterator<Robot.Component> robotIterator = robots.iterator();
+				while (robotIterator.hasNext()) {
+					Robot.Component robot = robotIterator.next();
+
+					String id = robot.robotActionHandler().getId();
+					if (idsToRemove.contains(id)) {
+						requires().log().info("EcoRobotImpl", "Robot #" + id + " has been removed");
+						idsToRemove.remove(id);
+						robotIterator.remove();
+					} else {
+						robot.robotActionHandler().move();
+					}
 				}
+
 				requires().log().info("EcoRobotImpl", "##### END MOVING ROBOTS #####");
+			}
+
+			@Override
+			public void killRobot(String id) {
+				requires().log().info("EcoRobotImpl", "Robot #" + id + " committed suicide");
+				idsToRemove.add(id);
 			}
 
 		};
