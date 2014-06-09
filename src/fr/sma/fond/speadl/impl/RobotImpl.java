@@ -1,7 +1,9 @@
 package fr.sma.fond.speadl.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.sma.fond.core.Cell;
 import fr.sma.fond.core.Position;
@@ -48,6 +50,7 @@ public class RobotImpl extends Robot {
 	protected RobotMemory make_memory() {
 		return new RobotMemory() {
 
+			private Map<Cell, Integer> memoryCells = new HashMap<Cell, Integer>();
 			private int nbInactive = 0;
 
 			@Override
@@ -76,16 +79,28 @@ public class RobotImpl extends Robot {
 					@Override
 					public Position getNextPosition(List<Cell> cells, State goal, Position current) {
 
+						for (Map.Entry<Cell, Integer> memoryCell : memoryCells.entrySet()) {
+
+							if (!cells.contains(memoryCell)) {
+								memoryCells.remove(memoryCell);
+							}
+						}
+
 						// Get only cells which are reachable in one move
 						List<Cell> reachableCells = new ArrayList<Cell>();
 
 						for (Cell cell : cells) {
 							if (isCellReachable(cell.getPosition())) {
+
+								if (!memoryCells.containsKey(cell)) {
+									memoryCells.put(cell, 0);
+								}
+
 								if (cell.getState() == goal) {
 									return cell.getPosition();
 								}
 
-								if (!isCellFull(cell.getState())) {
+								if (!isCellFull(cell.getState()) && memoryCells.get(cell) <= 2) {
 									reachableCells.add(cell);
 								}
 							}
@@ -93,14 +108,14 @@ public class RobotImpl extends Robot {
 
 						if (reachableCells.size() == 0) {
 							nbInactive++;
-							if (nbInactive > 3) {
+							if (nbInactive > 2 && robotState == State.EMPTYROBOT) {
+								eco_requires().gridProvider().setState(currentPosition.getX(), currentPosition.getY(), oldGridState);
 								eco_provides().ecoRobotManager().killRobot(id);
 							}
 							return null;
 						}
 
 						// Try to move on the goal direction
-
 						if (currentPosition.getY() == 0) {
 							defaultBehaviour = DOWN;
 						} else if (currentPosition.getY() == GridManager.GRID_HEIGHT - 1) {
@@ -118,6 +133,7 @@ public class RobotImpl extends Robot {
 							}
 
 							if (result) {
+								memoryCells.put(cell, memoryCells.get(cell) + 1);
 								return cell.getPosition();
 							}
 						}
@@ -127,17 +143,21 @@ public class RobotImpl extends Robot {
 							if (defaultBehaviour == UP) {
 
 								if (cell.getPosition().getY() < currentPosition.getY()) {
+									memoryCells.put(cell, memoryCells.get(cell) + 1);
 									return cell.getPosition();
 								}
 							} else {
 								if (cell.getPosition().getY() > currentPosition.getY()) {
+									memoryCells.put(cell, memoryCells.get(cell) + 1);
 									return cell.getPosition();
 								}
 							}
 						}
 
 						// Fool bahaviour
-						return reachableCells.get(0).getPosition();
+						Cell foolCell = reachableCells.get(0);
+						memoryCells.put(foolCell, memoryCells.get(foolCell) + 1);
+						return foolCell.getPosition();
 					}
 				};
 			}

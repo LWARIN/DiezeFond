@@ -27,7 +27,7 @@ public class Cell {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	
+
 	public boolean isUpdated() {
 		return updated;
 	}
@@ -38,5 +38,18 @@ public class Cell {
 
 	public String toString() {
 		return "Cell: {State: " + state + ", " + position + "}";
+	}
+
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+
+		Cell cell = (Cell) o;
+		return cell.position.equals(position);
+	}
+	
+	public int hashCode() {
+		return state.hashCode();
 	}
 }

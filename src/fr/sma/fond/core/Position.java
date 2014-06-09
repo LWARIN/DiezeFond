@@ -43,4 +43,8 @@ public class Position {
 			return this.x == pos.x && this.y == pos.y;
 		}
 	}
+	
+	public int hashCode() {
+		return this.hashCode();
+	}
 }
