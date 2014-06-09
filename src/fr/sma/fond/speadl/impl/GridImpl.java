@@ -50,10 +50,6 @@ public class GridImpl extends Grid {
 
 	}
 
-	public GridImpl() {
-
-	}
-
 	@Override
 	protected GridManager make_gridManager() {
 		return new GridManager() {

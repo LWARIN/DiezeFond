@@ -13,7 +13,7 @@ public class PlantImpl extends Plant {
 
 			@Override
 			public void setNbRobots(int nbRobots) {
-				// TODO Link with robots
+				parts().robots().ecoRobotManager().start(nbRobots);
 			}
 
 			@Override

@@ -9,7 +9,7 @@ import fr.sma.fond.speadl.EcoRobotManager;
 import Fond.EcoRobot;
 
 public class EcoRobotImpl extends EcoRobot {
-
+	int nbRobots = 0;
 	private List<Robot.Component> robots;
 	private List<String> idsToRemove;
 	private List<String> idsToAdd;
@@ -18,12 +18,6 @@ public class EcoRobotImpl extends EcoRobot {
 	@Override
 	protected void start() {
 		robots = new ArrayList<Robot.Component>();
-		for (int i = 0; i < 50; i++) {
-			Position startPosition = requires().gridProvider().getRandomFreeCell();
-			robots.add(newRobot("#id" + i, startPosition));
-			nextId = i + 1;
-		}
-
 		idsToRemove = new ArrayList<String>();
 		idsToAdd = new ArrayList<String>();
 	}
@@ -31,6 +25,19 @@ public class EcoRobotImpl extends EcoRobot {
 	@Override
 	protected EcoRobotManager make_ecoRobotManager() {
 		return new EcoRobotManager() {
+			
+			@Override
+			public void start(int nbRobots) {
+				robots = new ArrayList<Robot.Component>();
+				for (int i = 0; i < nbRobots; i++) {
+					Position startPosition = requires().gridProvider().getRandomFreeCell();
+					robots.add(newRobot("#id" + i, startPosition));
+					nextId = i + 1;
+				}
+
+				idsToRemove = new ArrayList<String>();
+				idsToAdd = new ArrayList<String>();
+			}
 
 			@Override
 			public void moveRobots() {
