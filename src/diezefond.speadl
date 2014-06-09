@@ -2,12 +2,13 @@ import fr.sma.fond.core.Position
 import fr.sma.fond.speadl.ActionManager
 import fr.sma.fond.speadl.EcoRobotManager
 import fr.sma.fond.speadl.GridManager
-import fr.sma.fond.speadl.InitManager
-import fr.sma.fond.speadl.MemoryManager
 import fr.sma.fond.speadl.GridProvider
-import fr.sma.fond.speadl.IGuiUpdate
-import fr.sma.fond.speadl.Log
 import fr.sma.fond.speadl.IGuiLogger
+import fr.sma.fond.speadl.IGuiUpdate
+import fr.sma.fond.speadl.InitManager
+import fr.sma.fond.speadl.Log
+import fr.sma.fond.speadl.MemoryManager
+import fr.sma.fond.speadl.ClockManager
 
 namespace Fond {
 	
@@ -32,6 +33,7 @@ namespace Fond {
 		requires ecoRobot : EcoRobotManager
 		requires guiUpdater : IGuiUpdate
 		requires log : Log
+		provides clockManager : ClockManager
 	}
 	
 	ecosystem EcoRobot {
@@ -69,6 +71,7 @@ namespace Fond {
 	
 	component Gui {
 		requires gridProvider : GridProvider
+		requires clockManager : ClockManager
 		
 		provides guiUpdater : IGuiUpdate	
 		provides guiLogger : IGuiLogger	
@@ -91,6 +94,7 @@ namespace Fond {
 		
 		part gui : Gui {
 			bind gridProvider to plant.gridProvider
+			bind clockManager to clock.clockManager
 		}
 		
 		part clock : Clock {

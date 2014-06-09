@@ -4,16 +4,19 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import fr.sma.fond.speadl.ClockManager;
 import Fond.Clock;
 
 public class ClockImpl extends Clock {
+	private Timer timer;
 	
 	public ClockImpl() {
-		startScheduling();
+		this.startScheduling(500, 500);
 	}
 	
-	private void startScheduling() {
-		Timer timer = new Timer();
+	private void startScheduling(int delay, int period) {
+		timer = new Timer();
 
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -22,6 +25,23 @@ public class ClockImpl extends Clock {
 				requires().ecoRobot().moveRobots();
 				requires().guiUpdater().refresh();
 			}
-		}, 500, 500);
+		}, delay, period);
+	}
+
+	@Override
+	protected ClockManager make_clockManager() {
+		return new ClockManager(){
+
+			@Override
+			public void start(int period) {
+				startScheduling(500, period);
+			}
+
+			@Override
+			public void pause() {
+				timer.cancel();
+			}
+			
+		};
 	}
 }

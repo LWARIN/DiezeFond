@@ -2,14 +2,20 @@ package fr.sma.fond.speadl.impl;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultCaret;
 
 import Fond.Gui;
@@ -18,26 +24,26 @@ import fr.sma.fond.core.GridGui;
 import fr.sma.fond.core.Level;
 import fr.sma.fond.speadl.IGuiLogger;
 import fr.sma.fond.speadl.IGuiUpdate;
-		
+
 public class AppGuiImpl extends Gui {
-	
+
 	private JFrame window;
 	private JPanel container;
-	
+	private int frequencyRate;
 	private JTextArea logArea;
-	
+
 	private GridGui gridGui;
-	
+
 	public AppGuiImpl(int width, int height) {
 		window = new JFrame();
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		container = new JPanel(new BorderLayout(0, 10));
-		gridGui = new GridGui(width, height);		
-		
+		gridGui = new GridGui(width, height);
+
 		initComponents();
-		
+
 		window.setContentPane(container);
 		window.pack();
 		window.setLocationRelativeTo(null);
@@ -53,33 +59,64 @@ public class AppGuiImpl extends Gui {
 				List<Cell> cellList = requires().gridProvider().getGridContent();
 				gridGui.updateGrid(cellList);
 			}
-			
+
 		};
 	}
-	
+
 	private void initComponents() {
-		JPanel menuPanel = new JPanel(new GridLayout(20, 1, 0, 3));
-		JButton testButton1 = new JButton("TODO");
-		JButton testButton2 = new JButton("TODO");
-		JButton testButton3 = new JButton("TODO");
-		JButton testButton4 = new JButton("TODO");
-		JButton testButton5 = new JButton("TODO");
+		frequencyRate = 500;
+
+		JMenuBar menuBar = new JMenuBar();
+		final JMenuItem playMenu = new JMenuItem("Play");
+		playMenu.setEnabled(false);
 		
-		menuPanel.add(testButton1);
-		menuPanel.add(testButton2);
-		menuPanel.add(testButton3);
-		menuPanel.add(testButton4);
-		menuPanel.add(testButton5);
+		final JMenuItem pauseMenu = new JMenuItem("Pause");
 		
+		final JSpinner frequency = new JSpinner(new SpinnerNumberModel(500, 200, 2000, 50));
+		frequency.setEnabled(false);
+
+		frequency.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				frequencyRate = (int) frequency.getModel().getValue();
+			}
+
+		});
+
+		playMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				playMenu.setEnabled(false);
+				pauseMenu.setEnabled(true);
+				frequency.setEnabled(false);
+
+				requires().clockManager().start(frequencyRate);
+			}
+		});
+
+		pauseMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				playMenu.setEnabled(true);
+				pauseMenu.setEnabled(false);
+				frequency.setEnabled(true);
+				requires().clockManager().pause();
+			}
+		});
+
+		menuBar.add(playMenu);
+		menuBar.add(pauseMenu);
+		menuBar.add(frequency);
+		window.setJMenuBar(menuBar);
+
 		logArea = new JTextArea();
 		((DefaultCaret) logArea.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		logArea.setEditable(false);
 		JScrollPane logPanel = new JScrollPane(logArea);
 		logPanel.setPreferredSize(new Dimension(0, 100));
-		
-		
+
 		container.add(gridGui, BorderLayout.CENTER);
-		container.add(menuPanel, BorderLayout.EAST);
 		container.add(logPanel, BorderLayout.SOUTH);
 	}
 
@@ -115,7 +152,7 @@ public class AppGuiImpl extends Gui {
 			@Override
 			public void logError(String message) {
 				logArea.append("\n" + "ERROR: " + message);
-			}			
+			}
 		};
 	}
 }

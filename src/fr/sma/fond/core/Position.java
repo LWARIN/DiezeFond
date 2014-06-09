@@ -34,4 +34,13 @@ public class Position {
 	public String toString() {
 		return "Position: {x: " + x + ", y: " + y + "}";
 	}
+
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		} else {
+			Position pos = (Position) o;
+			return this.x == pos.x && this.y == pos.y;
+		}
+	}
 }
