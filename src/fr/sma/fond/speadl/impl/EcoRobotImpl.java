@@ -12,6 +12,8 @@ public class EcoRobotImpl extends EcoRobot {
 
 	private List<Robot.Component> robots;
 	private List<String> idsToRemove;
+	private List<String> idsToAdd;
+	private int nextId;
 
 	@Override
 	protected void start() {
@@ -19,9 +21,11 @@ public class EcoRobotImpl extends EcoRobot {
 		for (int i = 0; i < 50; i++) {
 			Position startPosition = requires().gridProvider().getRandomFreeCell();
 			robots.add(newRobot("#id" + i, startPosition));
+			nextId = i + 1;
 		}
 
 		idsToRemove = new ArrayList<String>();
+		idsToAdd = new ArrayList<String>();
 	}
 
 	@Override
@@ -31,6 +35,13 @@ public class EcoRobotImpl extends EcoRobot {
 			@Override
 			public void moveRobots() {
 				requires().log().info("EcoRobotImpl", "##### START MOVING ROBOTS #####");
+
+				Iterator<String> idIterator = idsToAdd.iterator();
+				while (idIterator.hasNext()) {
+					Position startPosition = requires().gridProvider().getRandomFreeCell();
+					robots.add(newRobot(idIterator.next(), startPosition));
+					idIterator.remove();
+				}
 
 				Iterator<Robot.Component> robotIterator = robots.iterator();
 				while (robotIterator.hasNext()) {
@@ -53,6 +64,8 @@ public class EcoRobotImpl extends EcoRobot {
 			public void killRobot(String id) {
 				requires().log().info("EcoRobotImpl", "Robot #" + id + " committed suicide");
 				idsToRemove.add(id);
+				idsToAdd.add("#id" + nextId);
+				nextId++;
 			}
 
 		};
